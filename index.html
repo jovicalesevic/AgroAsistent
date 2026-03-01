@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="sr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agro Asistent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              forest: {
+                50: "#f2f7f2",
+                100: "#dfeee1",
+                200: "#b6d8bb",
+                300: "#8ec198",
+                400: "#5e9f6a",
+                500: "#3f7f4d",
+                600: "#2f6a3e",
+                700: "#255534",
+                800: "#1f452b",
+                900: "#183723"
+              }
+            }
+          }
+        }
+      };
+    </script>
+  </head>
+  <body class="bg-forest-50 text-forest-900">
+    <div class="min-h-screen px-5 py-8 sm:px-10 sm:py-12">
+      <header class="mb-8 text-center">
+        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-forest-700 text-3xl text-white">
+          🌾
+        </div>
+        <h1 class="text-3xl font-semibold sm:text-4xl">Agro Asistent</h1>
+        <p class="mx-auto mt-2 max-w-xl text-lg text-forest-700 sm:text-xl">
+          Jednostavna početna stranica sa velikim ikonama i krupnim tekstom.
+        </p>
+      </header>
+
+      <section class="mx-auto mb-8 max-w-4xl rounded-2xl border border-forest-200 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 class="text-2xl font-semibold text-forest-900">Brzi pristup najbitnijem</h2>
+            <p class="mt-2 text-lg text-forest-700">
+              Jednim dodirom do e-Agrara i vremenske prognoze.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <a
+              href="https://uap.gov.rs/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-xl bg-forest-700 px-5 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-forest-800"
+            >
+              e-Agrar
+            </a>
+            <a
+              href="https://www.hidmet.gov.rs/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-xl border border-forest-300 px-5 py-3 text-lg font-semibold text-forest-800 transition hover:bg-forest-100"
+            >
+              Prognoza
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="mx-auto mb-8 max-w-4xl">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">Glavni linkovi</h2>
+        <div class="grid gap-5 sm:grid-cols-2">
+        <a
+          href="https://uap.gov.rs/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+        >
+          <div class="flex items-start gap-4">
+            <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
+              🧾
+            </div>
+            <div>
+              <h2 class="text-2xl font-semibold text-forest-900">e-Agrar</h2>
+              <p class="mt-2 text-lg text-forest-700">
+                Prijave i evidencije za subvencije i gazdinstva.
+              </p>
+              <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                Otvori servis
+                <span class="text-2xl">→</span>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a
+          href="https://www.hidmet.gov.rs/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+        >
+          <div class="flex items-start gap-4">
+            <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
+              🌦️
+            </div>
+            <div>
+              <h2 class="text-2xl font-semibold text-forest-900">Vremenska prognoza</h2>
+              <p class="mt-2 text-lg text-forest-700">
+                Zvanična prognoza i upozorenja RHMZ.
+              </p>
+              <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                Pogledaj prognozu
+                <span class="text-2xl">→</span>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a
+          href="https://www.kupujemprodajem.com/poljoprivreda"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+        >
+          <div class="flex items-start gap-4">
+            <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
+              🧺
+            </div>
+            <div>
+              <h2 class="text-2xl font-semibold text-forest-900">KupujemProdajem</h2>
+              <p class="mt-2 text-lg text-forest-700">
+                Poljoprivredna oprema, stočna hrana i mehanizacija.
+              </p>
+              <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                Idi na oglase
+                <span class="text-2xl">→</span>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a
+          href="https://www.agroklub.rs/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+        >
+          <div class="flex items-start gap-4">
+            <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
+              📰
+            </div>
+            <div>
+              <h2 class="text-2xl font-semibold text-forest-900">Poljoprivredne vesti</h2>
+              <p class="mt-2 text-lg text-forest-700">
+                Najnovije informacije iz poljoprivrede i agrobiznisa.
+              </p>
+              <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                Čitaj vesti
+                <span class="text-2xl">→</span>
+              </span>
+            </div>
+          </div>
+        </a>
+        </div>
+      </section>
+
+      <section class="mx-auto max-w-4xl">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">Dodatne informacije</h2>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <a
+            href="https://www.stips.minpolj.gov.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div class="flex items-start gap-4">
+              <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
+                📈
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold text-forest-900">Berzanske cene</h3>
+                <p class="mt-2 text-lg text-forest-700">
+                  Pregled cena na pijacama i tržištima (STIPS).
+                </p>
+                <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                  Pogledaj cene
+                  <span class="text-2xl">→</span>
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="https://uap.gov.rs/podsticaji/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div class="flex items-start gap-4">
+              <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
+                💶
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold text-forest-900">Subvencije</h3>
+                <p class="mt-2 text-lg text-forest-700">
+                  Aktuelni podsticaji, javni pozivi i konkursi.
+                </p>
+                <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                  Proveri podsticaje
+                  <span class="text-2xl">→</span>
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="https://www.psss.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:col-span-2"
+          >
+            <div class="flex items-start gap-4">
+              <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
+                📞
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold text-forest-900">Savetodavne službe</h3>
+                <p class="mt-2 text-lg text-forest-700">
+                  Kontakti poljoprivrednih savetodavnih službi po regionima.
+                </p>
+                <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                  Pronađi kontakt
+                  <span class="text-2xl">→</span>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <footer class="mx-auto mt-10 max-w-4xl text-center text-base text-forest-700">
+        Sve na jednom mestu, prilagođeno velikom tekstu i jasnim ikonama.
+      </footer>
+    </div>
+  </body>
+</html>
