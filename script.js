@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       name: "Brus",
       key: "brus",
-      latitude: 43.38,
-      longitude: 21.03
+      latitude: 43.45,
+      longitude: 21.11
     },
     {
       name: "Aleksandrovac",
