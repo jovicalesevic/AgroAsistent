@@ -4,32 +4,85 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agro Asistent</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              forest: {
-                50: "#f2f7f2",
-                100: "#dfeee1",
-                200: "#b6d8bb",
-                300: "#8ec198",
-                400: "#5e9f6a",
-                500: "#3f7f4d",
-                600: "#2f6a3e",
-                700: "#255534",
-                800: "#1f452b",
-                900: "#183723"
-              }
-            }
-          }
-        }
-      };
-    </script>
   </head>
   <body class="bg-forest-50 text-forest-900">
     <div class="min-h-screen px-5 py-8 sm:px-10 sm:py-12">
+      <div class="weather-panel mb-6 px-4 py-3 text-forest-900 shadow-sm sm:px-6">
+        <div class="text-center text-base font-semibold text-forest-700">Trenutno vreme</div>
+        <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div class="rounded-xl bg-white/70 px-4 py-3 text-center sm:text-left">
+            <div class="text-sm font-semibold text-forest-800">Brus</div>
+            <div class="mt-1 text-xl font-semibold">
+              <span id="temp-brus">--</span>
+              <span class="text-base font-normal">°C</span>
+            </div>
+            <div class="mt-1 text-base">
+              <span id="humidity-brus">--</span>
+              <span class="text-sm font-normal">% vlaznost</span>
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Vetar: <span id="wind-brus">--</span> km/h
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Smer vetra: <span id="winddir-brus">--</span>
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Padavine: <span id="precip-brus">--</span> mm
+            </div>
+            <div id="status-brus" class="mt-1 text-xs text-forest-700">Ucitavanje...</div>
+          </div>
+
+          <div class="rounded-xl bg-white/70 px-4 py-3 text-center sm:text-left">
+            <div class="text-sm font-semibold text-forest-800">Aleksandrovac</div>
+            <div class="mt-1 text-xl font-semibold">
+              <span id="temp-aleksandrovac">--</span>
+              <span class="text-base font-normal">°C</span>
+            </div>
+            <div class="mt-1 text-base">
+              <span id="humidity-aleksandrovac">--</span>
+              <span class="text-sm font-normal">% vlaznost</span>
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Vetar: <span id="wind-aleksandrovac">--</span> km/h
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Smer vetra: <span id="winddir-aleksandrovac">--</span>
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Padavine: <span id="precip-aleksandrovac">--</span> mm
+            </div>
+            <div id="status-aleksandrovac" class="mt-2 text-sm text-forest-700">
+              Ucitavanje...
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-white/70 px-4 py-3 text-center sm:text-left">
+            <div class="text-sm font-semibold text-forest-800">Blace</div>
+            <div class="mt-1 text-xl font-semibold">
+              <span id="temp-blace">--</span>
+              <span class="text-base font-normal">°C</span>
+            </div>
+            <div class="mt-1 text-base">
+              <span id="humidity-blace">--</span>
+              <span class="text-sm font-normal">% vlaznost</span>
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Vetar: <span id="wind-blace">--</span> km/h
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Smer vetra: <span id="winddir-blace">--</span>
+            </div>
+            <div class="mt-1 text-sm text-forest-800">
+              Padavine: <span id="precip-blace">--</span> mm
+            </div>
+            <div id="status-blace" class="mt-1 text-xs text-forest-700">Ucitavanje...</div>
+          </div>
+        </div>
+      </div>
+
       <header class="mb-8 text-center">
         <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-forest-700 text-3xl text-white">
           🌾

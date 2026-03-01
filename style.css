@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+}
+
+.weather-panel {
+  background: #f3f4f6;
+  border-radius: 18px;
+}
