@@ -21,26 +21,22 @@ window.tailwind.config = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const locations = [
-    {
-      name: "Brus",
-      key: "brus",
-      latitude: 43.45,
-      longitude: 21.11
-    },
-    {
-      name: "Aleksandrovac",
-      key: "aleksandrovac",
-      latitude: 43.46,
-      longitude: 21.05
-    },
-    {
-      name: "Blace",
-      key: "blace",
-      latitude: 43.29,
-      longitude: 21.29
-    }
-  ];
+  const DEFAULT_LOCATION = {
+    name: "Brus",
+    latitude: 43.45,
+    longitude: 21.11
+  };
+
+  const locationEl = document.getElementById("weather-location");
+  const tempEl = document.getElementById("temp-value");
+  const humidityEl = document.getElementById("humidity-value");
+  const windEl = document.getElementById("wind-value");
+  const windDirEl = document.getElementById("winddir-value");
+  const precipEl = document.getElementById("precip-value");
+  const statusEl = document.getElementById("weather-status");
+  const forecastLinkEl = document.getElementById("forecast-link");
+  const inputEl = document.getElementById("location-input");
+  const buttonEl = document.getElementById("location-btn");
 
   const toCardinal = (degrees) => {
     const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -48,13 +44,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return directions[index];
   };
 
+  const setStatus = (text) => {
+    statusEl.textContent = text;
+  };
+
+  const updateForecastLink = (locationName) => {
+    const query = encodeURIComponent(locationName);
+    forecastLinkEl.href = `https://www.yr.no/en/search?q=${query}`;
+  };
+
   const fetchWeather = (location) => {
-    const tempEl = document.getElementById(`temp-${location.key}`);
-    const humidityEl = document.getElementById(`humidity-${location.key}`);
-    const windEl = document.getElementById(`wind-${location.key}`);
-    const windDirEl = document.getElementById(`winddir-${location.key}`);
-    const precipEl = document.getElementById(`precip-${location.key}`);
-    const statusEl = document.getElementById(`status-${location.key}`);
+    locationEl.textContent = location.name;
+    updateForecastLink(location.name);
+    setStatus("Ucitavanje...");
+
     const apiUrl =
       "https://api.open-meteo.com/v1/forecast?latitude=" +
       location.latitude +
@@ -80,12 +83,113 @@ document.addEventListener("DOMContentLoaded", () => {
         const windDirDegrees = Math.round(current.wind_direction_10m);
         windDirEl.textContent = `${toCardinal(windDirDegrees)} (${windDirDegrees}°)`;
         precipEl.textContent = Number(current.precipitation).toFixed(1);
-        statusEl.textContent = "Podaci osvezeni.";
+        setStatus("Podaci osvezeni.");
       })
       .catch(() => {
-        statusEl.textContent = "Nije moguce ucitati podatke.";
+        setStatus("Nije moguce ucitati podatke.");
       });
   };
 
-  locations.forEach(fetchWeather);
+  const reverseGeocode = (latitude, longitude) => {
+    const url =
+      "https://geocoding-api.open-meteo.com/v1/reverse?latitude=" +
+      latitude +
+      "&longitude=" +
+      longitude +
+      "&language=sr&format=json";
+    return fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Bad response");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!data || !data.results || !data.results.length) {
+          return null;
+        }
+        const result = data.results[0];
+        const parts = [result.name, result.admin1].filter(Boolean);
+        return parts.join(", ");
+      })
+      .catch(() => null);
+  };
+
+  const geocodeByName = (name) => {
+    const url =
+      "https://geocoding-api.open-meteo.com/v1/search?name=" +
+      encodeURIComponent(name) +
+      "&count=1&language=sr&format=json";
+    return fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Bad response");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!data || !data.results || !data.results.length) {
+          return null;
+        }
+        const result = data.results[0];
+        return {
+          name: result.name,
+          latitude: result.latitude,
+          longitude: result.longitude
+        };
+      })
+      .catch(() => null);
+  };
+
+  const setLocationFromInput = () => {
+    const value = inputEl.value.trim();
+    if (!value) {
+      setStatus("Unesite naziv mesta.");
+      return;
+    }
+    setStatus("Tražim mesto...");
+    geocodeByName(value).then((result) => {
+      if (!result) {
+        setStatus("Nije nadjeno mesto.");
+        return;
+      }
+      fetchWeather(result);
+    });
+  };
+
+  buttonEl.addEventListener("click", setLocationFromInput);
+  inputEl.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      setLocationFromInput();
+    }
+  });
+
+  if (!navigator.geolocation) {
+    fetchWeather(DEFAULT_LOCATION);
+    return;
+  }
+
+  setStatus("Tražim lokaciju...");
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      reverseGeocode(latitude, longitude).then((name) => {
+        const locationName = name || "Moja lokacija";
+        fetchWeather({
+          name: locationName,
+          latitude,
+          longitude
+        });
+      });
+    },
+    () => {
+      fetchWeather(DEFAULT_LOCATION);
+    },
+    {
+      enableHighAccuracy: false,
+      timeout: 6000,
+      maximumAge: 300000
+    }
+  );
 });

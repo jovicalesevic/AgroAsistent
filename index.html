@@ -10,80 +10,155 @@
   </head>
   <body class="bg-forest-50 text-forest-900">
     <div class="min-h-screen px-5 py-8 sm:px-10 sm:py-12">
-      <div class="weather-panel mb-5 px-3 py-2 text-forest-900 shadow-sm sm:px-5">
-        <div class="text-center text-sm font-semibold text-forest-700">
-          Prognoza za Brus i okolinu
-        </div>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div class="rounded-xl bg-white/70 px-3 py-2 text-center sm:text-left">
-            <div class="text-sm font-semibold text-forest-800">Brus</div>
-            <div class="mt-1 text-lg font-semibold">
-              <span id="temp-brus">--</span>
-              <span class="text-base font-normal">°C</span>
+      <div class="weather-panel mb-5 px-4 py-3 text-forest-900 shadow-sm sm:px-6">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div class="text-sm font-semibold text-forest-700">Trenutno vreme</div>
+            <div class="text-lg font-semibold text-forest-900" id="weather-location">
+              Brus
             </div>
-            <div class="mt-1 text-sm">
-              <span id="humidity-brus">--</span>
-              <span class="text-sm font-normal">% vlaznost</span>
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Vetar: <span id="wind-brus">--</span> km/h
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Smer vetra: <span id="winddir-brus">--</span>
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Padavine: <span id="precip-brus">--</span> mm
-            </div>
-            <div id="status-brus" class="mt-1 text-xs text-forest-700">Ucitavanje...</div>
-          </div>
-
-          <div class="rounded-xl bg-white/70 px-3 py-2 text-center sm:text-left">
-            <div class="text-sm font-semibold text-forest-800">Aleksandrovac</div>
-            <div class="mt-1 text-lg font-semibold">
-              <span id="temp-aleksandrovac">--</span>
-              <span class="text-base font-normal">°C</span>
-            </div>
-            <div class="mt-1 text-sm">
-              <span id="humidity-aleksandrovac">--</span>
-              <span class="text-sm font-normal">% vlaznost</span>
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Vetar: <span id="wind-aleksandrovac">--</span> km/h
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Smer vetra: <span id="winddir-aleksandrovac">--</span>
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Padavine: <span id="precip-aleksandrovac">--</span> mm
-            </div>
-            <div id="status-aleksandrovac" class="mt-2 text-sm text-forest-700">
-              Ucitavanje...
+            <div class="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-sm text-forest-800">
+              <div>Temperatura: <span id="temp-value">--</span>°C</div>
+              <div>Vlažnost: <span id="humidity-value">--</span>%</div>
+              <div>Vetar: <span id="wind-value">--</span> km/h</div>
+              <div>Smer: <span id="winddir-value">--</span></div>
+              <div>Padavine: <span id="precip-value">--</span> mm</div>
             </div>
           </div>
 
-          <div class="rounded-xl bg-white/70 px-3 py-2 text-center sm:text-left">
-            <div class="text-sm font-semibold text-forest-800">Blace</div>
-            <div class="mt-1 text-lg font-semibold">
-              <span id="temp-blace">--</span>
-              <span class="text-base font-normal">°C</span>
+          <div class="flex w-full flex-col gap-2 sm:w-auto sm:items-end">
+            <div class="flex w-full max-w-xs items-center gap-2">
+              <input
+                id="location-input"
+                type="text"
+                placeholder="Unesite mesto"
+                class="w-full rounded-xl border border-forest-200 bg-white px-3 py-2 text-sm text-forest-900 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+              />
+              <button
+                id="location-btn"
+                class="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+              >
+                Promeni
+              </button>
             </div>
-            <div class="mt-1 text-sm">
-              <span id="humidity-blace">--</span>
-              <span class="text-sm font-normal">% vlaznost</span>
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Vetar: <span id="wind-blace">--</span> km/h
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Smer vetra: <span id="winddir-blace">--</span>
-            </div>
-            <div class="mt-1 text-sm text-forest-800">
-              Padavine: <span id="precip-blace">--</span> mm
-            </div>
-            <div id="status-blace" class="mt-1 text-xs text-forest-700">Ucitavanje...</div>
+            <a
+              id="forecast-link"
+              href="https://www.yr.no/en/search?q=Brus"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+            >
+              Detaljna prognoza
+            </a>
+            <div id="weather-status" class="text-xs text-forest-700">Ucitavanje...</div>
           </div>
         </div>
       </div>
+
+      <section class="mx-auto mb-8 max-w-4xl">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">Lokalni Resursi</h2>
+        <div class="grid gap-5 sm:grid-cols-3">
+          <a
+            href="https://www.google.com/maps/search/Poljoprivredne+apoteke+Brus+i+Kru%C5%A1evac"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div class="flex flex-col items-start gap-4">
+              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-4xl text-white">
+                🧪
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold text-forest-900">Poljoprivredne Apoteke</h3>
+                <p class="mt-2 text-lg text-forest-700">
+                  Pretraga apoteka u Brusu i Kruševcu.
+                </p>
+                <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                  Otvori mapu
+                  <span class="text-2xl">→</span>
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="https://www.google.com/search?q=veterinarske+stanice+Rasinski+okrug"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div class="flex flex-col items-start gap-4">
+              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-4xl text-white">
+                🐄
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold text-forest-900">Veterinarske Stanice</h3>
+                <p class="mt-2 text-lg text-forest-700">
+                  Lista veterinara i stanica u Rasinskom okrugu.
+                </p>
+                <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
+                  Pogledaj listu
+                  <span class="text-2xl">→</span>
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <div class="rounded-2xl border border-forest-200 bg-white p-6 shadow-sm">
+            <div class="flex flex-col items-start gap-4">
+              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-4xl text-white">
+                🧴
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold text-forest-900">Agromarket / Galenika</h3>
+                <p class="mt-2 text-lg text-forest-700">
+                  Direktni linkovi za proveru preparata.
+                </p>
+                <div class="mt-4 flex flex-col gap-3">
+                  <a
+                    href="https://www.agromarket.rs/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded-xl bg-emerald-700 px-4 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+                  >
+                    Agromarket
+                  </a>
+                  <a
+                    href="https://www.galenika.rs/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded-xl bg-emerald-700 px-4 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+                  >
+                    Galenika
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mx-auto mb-8 max-w-4xl">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">Mehanizacija</h2>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <a
+            href="https://www.kupujemprodajem.com/poljoprivreda/kategorija/501/najnoviji?categoryHeadline=true&categoryId=501"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-2xl bg-emerald-700 px-6 py-5 text-center text-xl font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+          >
+            Polovna mehanizacija (KupujemProdajem)
+          </a>
+          <a
+            href="https://www.fpm.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-2xl bg-emerald-700 px-6 py-5 text-center text-xl font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+          >
+            Nove mašine (FPM Agromehanika)
+          </a>
+        </div>
+      </section>
 
       <header class="mb-8 text-center">
         <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-forest-700 text-3xl text-white">
