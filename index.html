@@ -58,51 +58,53 @@
       <section class="mx-auto mb-8 max-w-4xl">
         <h2 class="mb-4 text-2xl font-semibold text-forest-900">Lokalni Resursi</h2>
         <div class="grid gap-5 sm:grid-cols-3">
-          <a
-            href="https://www.google.com/maps/search/Poljoprivredne+apoteke+Brus+i+Kru%C5%A1evac"
-            target="_blank"
-            rel="noopener noreferrer"
+          <div
             class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <div class="flex flex-col items-start gap-4">
-              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-4xl text-white">
-                🧪
+              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-3xl text-white">
+                <span class="mr-1">✚</span>
               </div>
               <div>
                 <h3 class="text-2xl font-semibold text-forest-900">Poljoprivredne Apoteke</h3>
                 <p class="mt-2 text-lg text-forest-700">
-                  Pretraga apoteka u Brusu i Kruševcu.
+                  Pretraga najbliže poljoprivredne apoteke u tvojoj okolini.
                 </p>
-                <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
-                  Otvori mapu
-                  <span class="text-2xl">→</span>
-                </span>
+                <button
+                  id="btn-apoteka"
+                  type="button"
+                  class="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+                >
+                  <span class="text-xl">✚</span>
+                  Pronađi najbližu apoteku
+                </button>
               </div>
             </div>
-          </a>
+          </div>
 
-          <a
-            href="https://www.google.com/search?q=veterinarske+stanice+Rasinski+okrug"
-            target="_blank"
-            rel="noopener noreferrer"
+          <div
             class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <div class="flex flex-col items-start gap-4">
-              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-4xl text-white">
-                🐄
+              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-3xl text-white">
+                <span>🐾</span>
               </div>
               <div>
                 <h3 class="text-2xl font-semibold text-forest-900">Veterinarske Stanice</h3>
                 <p class="mt-2 text-lg text-forest-700">
-                  Lista veterinara i stanica u Rasinskom okrugu.
+                  Pretraga najbližeg veterinara u tvojoj okolini.
                 </p>
-                <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
-                  Pogledaj listu
-                  <span class="text-2xl">→</span>
-                </span>
+                <button
+                  id="btn-veterinar"
+                  type="button"
+                  class="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+                >
+                  <span class="text-xl">🐾</span>
+                  Pronađi veterinara
+                </button>
               </div>
             </div>
-          </a>
+          </div>
 
           <div class="rounded-2xl border border-forest-200 bg-white p-6 shadow-sm">
             <div class="flex flex-col items-start gap-4">
@@ -139,6 +141,28 @@
       </section>
 
       <section class="mx-auto mb-8 max-w-4xl">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">Subvencije i eAgrar</h2>
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4">
+          <a
+            href="https://epodsticaji.eagrar.gov.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex-1 rounded-2xl bg-yellow-500 px-6 py-5 text-center text-xl font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-600"
+          >
+            Proveri ePodsticaje (eAgrar)
+          </a>
+          <a
+            href="https://uap.gov.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-2xl bg-yellow-500 px-5 py-3 text-lg font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-600"
+          >
+            Aktuelni konkursi
+          </a>
+        </div>
+      </section>
+
+      <section class="mx-auto mb-8 max-w-4xl">
         <h2 class="mb-4 text-2xl font-semibold text-forest-900">Mehanizacija</h2>
         <div class="grid gap-5 sm:grid-cols-2">
           <a
@@ -169,35 +193,6 @@
           Jednostavna početna stranica sa velikim ikonama i krupnim tekstom.
         </p>
       </header>
-
-      <section class="mx-auto mb-8 max-w-4xl rounded-2xl border border-forest-200 bg-white p-6 shadow-sm">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 class="text-2xl font-semibold text-forest-900">Brzi pristup najbitnijem</h2>
-            <p class="mt-2 text-lg text-forest-700">
-              Jednim dodirom do e-Agrara i vremenske prognoze.
-            </p>
-          </div>
-          <div class="flex flex-col gap-3 sm:flex-row">
-            <a
-              href="https://uap.gov.rs/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="rounded-xl bg-emerald-700 px-5 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
-            >
-              e-Agrar
-            </a>
-            <a
-              href="https://www.hidmet.gov.rs/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="rounded-xl border border-forest-300 px-5 py-3 text-lg font-semibold text-forest-800 transition hover:bg-forest-100"
-            >
-              Prognoza
-            </a>
-          </div>
-        </div>
-      </section>
 
       <section class="mx-auto mb-8 max-w-4xl">
         <h2 class="mb-4 text-2xl font-semibold text-forest-900">Glavni linkovi</h2>

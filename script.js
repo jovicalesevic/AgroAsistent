@@ -164,6 +164,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Lokalni resursi - pretraga apoteke i veterinara
+  const openMapsSearch = (query) => {
+    const queryEncoded = query.replace(/ /g, "+");
+    const useDefault = () => {
+      const lat = 43.45;
+      const lon = 21.11;
+      console.log("Moja lokacija (fallback Brus):", lat, lon);
+      const url = `https://www.google.com/maps/search/${queryEncoded}/@${lat},${lon},15z`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    };
+    if (!navigator.geolocation) {
+      useDefault();
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        console.log("Moja lokacija:", lat, lon);
+        const url = `https://www.google.com/maps/search/${queryEncoded}/@${lat},${lon},15z`;
+        window.open(url, "_blank", "noopener,noreferrer");
+      },
+      useDefault,
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+    );
+  };
+
+  document.getElementById("btn-apoteka").addEventListener("click", () => {
+    openMapsSearch("poljoprivredna apoteka");
+  });
+  document.getElementById("btn-veterinar").addEventListener("click", () => {
+    openMapsSearch("veterinar");
+  });
+
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);
     return;
