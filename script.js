@@ -215,6 +215,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Kurs evra (NBS) – prikaz iz besplatnog API-ja
+  const eurRateEl = document.getElementById("eur-rate");
+  if (eurRateEl) {
+    fetch("https://open.er-api.com/v6/latest/EUR")
+      .then((r) => r.json())
+      .then((data) => {
+        const rsd = data?.rates?.RSD;
+        if (typeof rsd === "number") {
+          eurRateEl.textContent = `1 EUR = ${rsd.toFixed(2)} RSD`;
+        }
+      })
+      .catch(() => {});
+  }
+
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);
     return;
