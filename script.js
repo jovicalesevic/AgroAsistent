@@ -164,39 +164,56 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Lokalni resursi - pretraga apoteke i veterinara
-  const openMapsSearch = (query) => {
-    const queryEncoded = query.replace(/ /g, "+");
-    const useDefault = () => {
-      const lat = 43.45;
-      const lon = 21.11;
-      console.log("Moja lokacija (fallback Brus):", lat, lon);
-      const url = `https://www.google.com/maps/search/${queryEncoded}/@${lat},${lon},15z`;
-      window.open(url, "_blank", "noopener,noreferrer");
-    };
-    if (!navigator.geolocation) {
-      useDefault();
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        console.log("Moja lokacija:", lat, lon);
-        const url = `https://www.google.com/maps/search/${queryEncoded}/@${lat},${lon},15z`;
-        window.open(url, "_blank", "noopener,noreferrer");
-      },
-      useDefault,
-      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-    );
+  // Lokalni resursi - pretraga apoteke i veterinara (koristi sačuvanu lokaciju)
+  const STORAGE_KEY = "agroAsistentLokacija";
+
+  const savedLocationInput = document.getElementById("saved-location-input");
+  const savedLocationBtn = document.getElementById("saved-location-btn");
+
+  if (savedLocationInput) {
+    savedLocationInput.value = localStorage.getItem(STORAGE_KEY) || "";
+  }
+  if (savedLocationBtn) {
+    savedLocationBtn.addEventListener("click", () => {
+      const val = (savedLocationInput?.value || "").trim() || "Brus";
+      localStorage.setItem(STORAGE_KEY, val);
+      if (savedLocationInput) savedLocationInput.value = val;
+    });
+  }
+
+  const getLokacija = () => (localStorage.getItem(STORAGE_KEY) || "").trim() || "Brus";
+
+  const btnApoteka = document.getElementById("btn-apoteka");
+  const btnVeterinar = document.getElementById("veterinar-btn");
+
+  const buildMapsUrl = (searchTerm) => {
+    const lokacija = getLokacija();
+    const query = `${searchTerm} ${lokacija} Srbija`;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
   };
 
-  document.getElementById("btn-apoteka").addEventListener("click", () => {
-    openMapsSearch("poljoprivredna apoteka");
-  });
-  document.getElementById("btn-veterinar").addEventListener("click", () => {
-    openMapsSearch("veterinar");
-  });
+  if (btnApoteka) {
+    btnApoteka.addEventListener("click", () => {
+      const url = buildMapsUrl("poljoprivredna apoteka");
+      window.open(url, "_blank", "noopener,noreferrer");
+    });
+  }
+
+  if (btnVeterinar) {
+    btnVeterinar.addEventListener("click", () => {
+      const url = buildMapsUrl("veterinar");
+      window.open(url, "_blank", "noopener,noreferrer");
+    });
+  }
+
+  const yrnoBtn = document.getElementById("yrno-btn");
+  if (yrnoBtn) {
+    yrnoBtn.addEventListener("click", () => {
+      const lokacija = getLokacija();
+      const url = `https://www.yr.no/en/search?q=${encodeURIComponent(lokacija)}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    });
+  }
 
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);

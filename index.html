@@ -50,9 +50,33 @@
             >
               Detaljna prognoza
             </a>
+            <button
+              id="yrno-btn"
+              type="button"
+              class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+            >
+              Detaljna Norveška Prognoza (Yr.no)
+            </button>
             <div id="weather-status" class="text-xs text-forest-700">Ucitavanje...</div>
           </div>
         </div>
+      </div>
+
+      <div class="mx-auto mb-6 flex max-w-4xl items-center gap-2 text-sm text-forest-700">
+        <label for="saved-location-input">Moja lokacija:</label>
+        <input
+          id="saved-location-input"
+          type="text"
+          placeholder="npr. Brus"
+          class="w-32 rounded border border-forest-200 bg-white px-2 py-1.5 text-forest-900 focus:border-emerald-500 focus:outline-none"
+        />
+        <button
+          id="saved-location-btn"
+          type="button"
+          class="rounded bg-forest-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-forest-700"
+        >
+          Sačuvaj
+        </button>
       </div>
 
       <section class="mx-auto mb-8 max-w-4xl">
@@ -95,7 +119,7 @@
                   Pretraga najbližeg veterinara u tvojoj okolini.
                 </p>
                 <button
-                  id="btn-veterinar"
+                  id="veterinar-btn"
                   type="button"
                   class="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
                 >
