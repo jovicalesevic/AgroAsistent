@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const precipEl = document.getElementById("precip-value");
   const precipProbEl = document.getElementById("precip-prob-value");
   const frostWarningEl = document.getElementById("frost-warning");
+  const sunriseEl = document.getElementById("sunrise-value");
+  const sunsetEl = document.getElementById("sunset-value");
   const statusEl = document.getElementById("weather-status");
   const forecastLinkEl = document.getElementById("forecast-link");
   const inputEl = document.getElementById("location-input");
@@ -65,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       location.latitude +
       "&longitude=" +
       location.longitude +
-      "&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation&hourly=precipitation_probability&timezone=Europe%2FBelgrade";
+      "&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation&hourly=precipitation_probability&daily=sunrise,sunset&timezone=Europe%2FBelgrade";
 
     fetch(apiUrl)
       .then((response) => {
@@ -103,11 +105,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (frostWarningEl) {
           if (temp < 3) {
-            frostWarningEl.textContent = "⚠️ Moguć mraz";
+            frostWarningEl.textContent = "⚠️ Moguć mraz!";
             frostWarningEl.classList.remove("hidden");
           } else {
             frostWarningEl.classList.add("hidden");
           }
+        }
+
+        const formatTime = (iso) => {
+          if (!iso) return "—";
+          const d = new Date(iso);
+          return d.toLocaleTimeString("sr-RS", { hour: "2-digit", minute: "2-digit" });
+        };
+        if (data.daily && data.daily.sunrise && data.daily.sunrise[0]) {
+          if (sunriseEl) sunriseEl.textContent = formatTime(data.daily.sunrise[0]);
+          if (sunsetEl) sunsetEl.textContent = formatTime(data.daily.sunset[0]);
+        } else {
+          if (sunriseEl) sunriseEl.textContent = "—";
+          if (sunsetEl) sunsetEl.textContent = "—";
         }
 
         setStatus("Podaci osvezeni.");
