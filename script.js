@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const windEl = document.getElementById("wind-value");
   const windDirEl = document.getElementById("winddir-value");
   const precipEl = document.getElementById("precip-value");
+  const precipProbEl = document.getElementById("precip-prob-value");
+  const frostWarningEl = document.getElementById("frost-warning");
   const statusEl = document.getElementById("weather-status");
   const forecastLinkEl = document.getElementById("forecast-link");
   const inputEl = document.getElementById("location-input");
@@ -63,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       location.latitude +
       "&longitude=" +
       location.longitude +
-      "&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation&timezone=Europe%2FBelgrade";
+      "&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation&hourly=precipitation_probability&timezone=Europe%2FBelgrade";
 
     fetch(apiUrl)
       .then((response) => {
@@ -77,12 +79,37 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!current) {
           throw new Error("No data");
         }
-        tempEl.textContent = Math.round(current.temperature_2m);
+        const temp = Math.round(current.temperature_2m);
+        tempEl.textContent = temp;
         humidityEl.textContent = Math.round(current.relative_humidity_2m);
         windEl.textContent = Math.round(current.wind_speed_10m);
-        const windDirDegrees = Math.round(current.wind_direction_10m);
-        windDirEl.textContent = `${toCardinal(windDirDegrees)} (${windDirDegrees}°)`;
+        if (windDirEl) {
+          const windDirDegrees = Math.round(current.wind_direction_10m);
+          windDirEl.textContent = `${toCardinal(windDirDegrees)} (${windDirDegrees}°)`;
+        }
         precipEl.textContent = Number(current.precipitation).toFixed(1);
+
+        let precipProb = "—";
+        if (data.hourly && data.hourly.precipitation_probability && data.hourly.time) {
+          const now = new Date();
+          const times = data.hourly.time;
+          let idx = times.findIndex((t) => new Date(t) > now);
+          if (idx < 0) idx = 0;
+          const nextFew = data.hourly.precipitation_probability.slice(idx, idx + 4);
+          const maxProb = nextFew.length ? Math.max(...nextFew) : null;
+          precipProb = maxProb !== null ? maxProb : "—";
+        }
+        if (precipProbEl) precipProbEl.textContent = precipProb;
+
+        if (frostWarningEl) {
+          if (temp < 3) {
+            frostWarningEl.textContent = "PAŽNJA: Moguća pojava mraza!";
+            frostWarningEl.classList.remove("hidden");
+          } else {
+            frostWarningEl.classList.add("hidden");
+          }
+        }
+
         setStatus("Podaci osvezeni.");
       })
       .catch(() => {
