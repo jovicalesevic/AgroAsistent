@@ -215,6 +215,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Vesti iz Agrara (Agroklub RSS)
+  const agroVestiEl = document.getElementById("agro-vesti");
+  const fallbackVestiMsg =
+    '<p class="text-forest-600">Trenutno nema novih vesti, proverite kasnije.</p>';
+
+  if (agroVestiEl) {
+    fetch(
+      "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.agroklub.rs%2Frss%2F&api_key=00000000000000000000000000000000"
+    )
+      .then((r) => r.json())
+      .then((data) => {
+        console.log("Rezultat vesti:", data);
+        if (data.status !== "ok" || !data.items || !data.items.length) {
+          agroVestiEl.innerHTML = fallbackVestiMsg;
+          return;
+        }
+        const items = data.items.slice(0, 4);
+        agroVestiEl.innerHTML = items
+          .map(
+            (item) =>
+              `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="block rounded-xl border border-forest-200 bg-white px-4 py-3 text-forest-800 shadow-sm transition hover:border-forest-400 hover:bg-forest-50">${item.title}</a>`
+          )
+          .join("");
+      })
+      .catch((err) => {
+        console.log("Rezultat vesti (greska):", err);
+        agroVestiEl.innerHTML = fallbackVestiMsg;
+      });
+  }
+
   // Kurs evra (NBS) – prikaz iz besplatnog API-ja
   const eurRateEl = document.getElementById("eur-rate");
   if (eurRateEl) {

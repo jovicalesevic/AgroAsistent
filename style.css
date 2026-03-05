@@ -6,3 +6,16 @@ body {
   background: #f3f4f6;
   border-radius: 18px;
 }
+
+.section-card-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.section-card-grid > * {
+  min-height: 180px;
+}
+
+.section-card {
+  min-height: 180px;
+}
