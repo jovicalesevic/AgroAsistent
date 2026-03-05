@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (frostWarningEl) {
           if (temp < 3) {
-            frostWarningEl.textContent = "PAŽNJA: Moguća pojava mraza!";
+            frostWarningEl.textContent = "⚠️ Moguć mraz";
             frostWarningEl.classList.remove("hidden");
           } else {
             frostWarningEl.classList.add("hidden");
