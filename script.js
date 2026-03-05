@@ -1,3 +1,4 @@
+// Agro Asistent
 window.tailwind = window.tailwind || {};
 window.tailwind.config = {
   theme: {
