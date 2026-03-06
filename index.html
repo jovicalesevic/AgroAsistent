@@ -90,10 +90,23 @@
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
           <div class="flex flex-col gap-1">
             <label for="prskalica-litara" class="text-sm font-medium text-forest-800">Veličina prskalice (L):</label>
+            <div class="mb-1.5 flex gap-2">
+              <button type="button" data-litara="10" class="rounded-lg bg-sky-500/80 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-300">
+                10L
+              </button>
+              <button type="button" data-litara="12" class="rounded-lg bg-sky-500/80 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-300">
+                12L
+              </button>
+              <button type="button" data-litara="16" class="rounded-lg bg-sky-500/80 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-300">
+                16L
+              </button>
+            </div>
             <input
               id="prskalica-litara"
               type="number"
+              inputmode="decimal"
               min="1"
+              step="any"
               value="10"
               placeholder="10"
               class="w-full max-w-xs rounded-xl border border-forest-200 bg-white px-3 py-2 text-forest-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
@@ -104,19 +117,29 @@
             <input
               id="doza-na-100l"
               type="number"
+              inputmode="decimal"
               min="0"
-              step="0.01"
+              step="any"
               placeholder="npr. 50"
               class="w-full max-w-xs rounded-xl border border-forest-200 bg-white px-3 py-2 text-forest-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
             />
           </div>
-          <button
-            id="izracunaj-doza-btn"
-            type="button"
-            class="rounded-xl bg-sky-600 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-sky-700"
-          >
-            Izračunaj
-          </button>
+          <div class="flex flex-wrap gap-2">
+            <button
+              id="izracunaj-doza-btn"
+              type="button"
+              class="rounded-xl bg-sky-600 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-sky-700"
+            >
+              Izračunaj
+            </button>
+            <button
+              id="reset-doza-btn"
+              type="button"
+              class="rounded-xl bg-gray-500 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            >
+              Reset
+            </button>
+          </div>
         </div>
         <div id="doza-rezultat" class="mt-4 hidden text-2xl font-bold text-forest-900"></div>
       </section>

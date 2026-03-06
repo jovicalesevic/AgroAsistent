@@ -276,7 +276,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const prskalicaInput = document.getElementById("prskalica-litara");
   const dozaInput = document.getElementById("doza-na-100l");
   const izracunajBtn = document.getElementById("izracunaj-doza-btn");
+  const resetDozaBtn = document.getElementById("reset-doza-btn");
   const dozaRezultatEl = document.getElementById("doza-rezultat");
+
+  document.querySelectorAll("[data-litara]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const val = btn.getAttribute("data-litara");
+      if (prskalicaInput && val) prskalicaInput.value = val;
+    });
+  });
 
   if (izracunajBtn && dozaRezultatEl) {
     izracunajBtn.addEventListener("click", () => {
@@ -290,6 +298,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const rezultat = (litraza / 100) * doza;
       dozaRezultatEl.textContent = `Rezultat: ${rezultat.toFixed(2)} g/ml`;
       dozaRezultatEl.classList.remove("hidden");
+    });
+  }
+
+  if (resetDozaBtn) {
+    resetDozaBtn.addEventListener("click", () => {
+      if (prskalicaInput) prskalicaInput.value = "";
+      if (dozaInput) dozaInput.value = "";
+      if (dozaRezultatEl) {
+        dozaRezultatEl.textContent = "";
+        dozaRezultatEl.classList.add("hidden");
+      }
     });
   }
 
