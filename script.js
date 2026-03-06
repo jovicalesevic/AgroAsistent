@@ -272,6 +272,27 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => {});
   }
 
+  // Kalkulator zaštite – (litraža / 100) * doza
+  const prskalicaInput = document.getElementById("prskalica-litara");
+  const dozaInput = document.getElementById("doza-na-100l");
+  const izracunajBtn = document.getElementById("izracunaj-doza-btn");
+  const dozaRezultatEl = document.getElementById("doza-rezultat");
+
+  if (izracunajBtn && dozaRezultatEl) {
+    izracunajBtn.addEventListener("click", () => {
+      const litraza = parseFloat(prskalicaInput?.value) || 0;
+      const doza = parseFloat(dozaInput?.value) || 0;
+      if (litraza <= 0 || doza <= 0) {
+        dozaRezultatEl.textContent = "Unesite validne vrednosti.";
+        dozaRezultatEl.classList.remove("hidden");
+        return;
+      }
+      const rezultat = (litraza / 100) * doza;
+      dozaRezultatEl.textContent = `Rezultat: ${rezultat.toFixed(2)} g/ml`;
+      dozaRezultatEl.classList.remove("hidden");
+    });
+  }
+
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);
     return;

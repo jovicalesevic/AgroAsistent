@@ -85,6 +85,42 @@
         </button>
       </div>
 
+      <section id="kalkulator" class="mx-auto mb-8 max-w-4xl rounded-2xl border-2 border-sky-200 bg-sky-100/90 p-6 shadow-md">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">🧮 Kalkulator za prskanje</h2>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="prskalica-litara" class="text-sm font-medium text-forest-800">Veličina prskalice (L):</label>
+            <input
+              id="prskalica-litara"
+              type="number"
+              min="1"
+              value="10"
+              placeholder="10"
+              class="w-full max-w-xs rounded-xl border border-forest-200 bg-white px-3 py-2 text-forest-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="doza-na-100l" class="text-sm font-medium text-forest-800">Preporučena doza na 100L (g ili ml):</label>
+            <input
+              id="doza-na-100l"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="npr. 50"
+              class="w-full max-w-xs rounded-xl border border-forest-200 bg-white px-3 py-2 text-forest-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
+            />
+          </div>
+          <button
+            id="izracunaj-doza-btn"
+            type="button"
+            class="rounded-xl bg-sky-600 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-sky-700"
+          >
+            Izračunaj
+          </button>
+        </div>
+        <div id="doza-rezultat" class="mt-4 hidden text-2xl font-bold text-forest-900"></div>
+      </section>
+
       <section class="mx-auto mb-8 max-w-4xl">
         <h2 class="mb-4 text-2xl font-semibold text-forest-900">Lokalni Resursi</h2>
         <div class="grid gap-5 sm:grid-cols-3">
