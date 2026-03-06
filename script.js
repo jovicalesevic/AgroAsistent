@@ -312,6 +312,104 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Beležnica Radova – localStorage
+  const BELEZNICA_KEY = "agroAsistentBeleznica";
+  const aktivnostInput = document.getElementById("aktivnost-input");
+  const sacuvajAktivnostBtn = document.getElementById("sacuvaj-aktivnost-btn");
+  const beleznicaLista = document.getElementById("beleznica-lista");
+  const obrisiSveBeleznicaBtn = document.getElementById("obrisi-sve-beleznica-btn");
+
+  const getBeleznice = () => {
+    try {
+      const raw = localStorage.getItem(BELEZNICA_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const setBeleznice = (arr) => {
+    localStorage.setItem(BELEZNICA_KEY, JSON.stringify(arr));
+  };
+
+  const formatDatumVreme = (isoStr) => {
+    const d = new Date(isoStr);
+    return d.toLocaleString("sr-RS", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  };
+
+  const renderBeleznice = () => {
+    if (!beleznicaLista) return;
+    const list = getBeleznice();
+    beleznicaLista.innerHTML = "";
+    list.forEach((item, idx) => {
+      const li = document.createElement("li");
+      li.className = "beleznica-listica";
+      li.dataset.index = String(idx);
+      const contentDiv = document.createElement("div");
+      contentDiv.className = "flex flex-1 flex-col";
+      const textEl = document.createElement("div");
+      textEl.className = "beleznica-listica-text";
+      textEl.textContent = item.text;
+      const datumEl = document.createElement("div");
+      datumEl.className = "beleznica-listica-datum";
+      datumEl.textContent = formatDatumVreme(item.dateTime);
+      contentDiv.appendChild(textEl);
+      contentDiv.appendChild(datumEl);
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "beleznica-obrisi-btn";
+      btn.setAttribute("aria-label", "Obriši belešku");
+      btn.textContent = "×";
+      btn.addEventListener("click", () => {
+        const arr = getBeleznice();
+        arr.splice(idx, 1);
+        setBeleznice(arr);
+        renderBeleznice();
+      });
+      li.appendChild(contentDiv);
+      li.appendChild(btn);
+      beleznicaLista.appendChild(li);
+    });
+  };
+
+  if (sacuvajAktivnostBtn && aktivnostInput) {
+    sacuvajAktivnostBtn.addEventListener("click", () => {
+      const text = aktivnostInput.value.trim();
+      if (!text) return;
+      const arr = getBeleznice();
+      arr.unshift({
+        text,
+        dateTime: new Date().toISOString()
+      });
+      setBeleznice(arr);
+      aktivnostInput.value = "";
+      renderBeleznice();
+    });
+  }
+
+  if (aktivnostInput) {
+    aktivnostInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && sacuvajAktivnostBtn) sacuvajAktivnostBtn.click();
+    });
+  }
+
+  if (obrisiSveBeleznicaBtn) {
+    obrisiSveBeleznicaBtn.addEventListener("click", () => {
+      if (confirm("Da li želite da obrišete sve beleške?")) {
+        setBeleznice([]);
+        renderBeleznice();
+      }
+    });
+  }
+
+  renderBeleznice();
+
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);
     return;

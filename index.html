@@ -19,13 +19,13 @@
               Brus
             </div>
             <div class="mt-2 text-2xl font-semibold text-forest-900">
-              <span id="temp-value">--</span>°C
+              <span>🌡️</span> <span id="temp-value">--</span>°C
             </div>
             <div class="weather-details mt-2 grid grid-cols-2 gap-x-6 gap-y-0.5">
               <div><span>💧</span> Vlažnost: <span id="humidity-value">--</span>%</div>
               <div><span>🌬️</span> Vetar: <span id="wind-value">--</span> km/h</div>
-              <div>Verovatnoća padavina: <span id="precip-prob-value">--</span>%</div>
-              <div>Padavine: <span id="precip-value">--</span> mm</div>
+              <div><span>🌧️</span> Verovatnoća padavina: <span id="precip-prob-value">--</span>%</div>
+              <div><span>💦</span> Padavine: <span id="precip-value">--</span> mm</div>
               <div><span>🌅</span> Izlazak: <span id="sunrise-value">--</span></div>
               <div><span>🌇</span> Zalazak: <span id="sunset-value">--</span></div>
             </div>
@@ -90,16 +90,10 @@
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
           <div class="flex flex-col gap-1">
             <label for="prskalica-litara" class="text-sm font-medium text-forest-800">Veličina prskalice (L):</label>
-            <div class="mb-1.5 flex gap-2">
-              <button type="button" data-litara="10" class="rounded-lg bg-sky-500/80 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-300">
-                10L
-              </button>
-              <button type="button" data-litara="12" class="rounded-lg bg-sky-500/80 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-300">
-                12L
-              </button>
-              <button type="button" data-litara="16" class="rounded-lg bg-sky-500/80 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-300">
-                16L
-              </button>
+            <div class="calc-litara-buttons mb-1.5 flex flex-wrap gap-3">
+              <button type="button" data-litara="10" class="calc-litara-btn">10L</button>
+              <button type="button" data-litara="12" class="calc-litara-btn">12L</button>
+              <button type="button" data-litara="16" class="calc-litara-btn">16L</button>
             </div>
             <input
               id="prskalica-litara"
@@ -128,20 +122,20 @@
             <button
               id="izracunaj-doza-btn"
               type="button"
-              class="rounded-xl bg-sky-600 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-sky-700"
+              class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-sky-700"
             >
-              Izračunaj
+              <span>🧪</span> Izračunaj
             </button>
             <button
               id="reset-doza-btn"
               type="button"
-              class="rounded-xl bg-gray-500 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
+              class="inline-flex items-center gap-2 rounded-xl bg-gray-500 px-5 py-2.5 text-base font-semibold text-white transition hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
             >
-              Reset
+              <span>🧹</span> Reset
             </button>
           </div>
         </div>
-        <div id="doza-rezultat" class="mt-4 hidden text-2xl font-bold text-forest-900"></div>
+        <div id="doza-rezultat" class="doza-rezultat-box mt-4 hidden"></div>
       </section>
 
       <section class="mx-auto mb-8 max-w-4xl">
@@ -455,6 +449,36 @@
             </div>
           </a>
         </div>
+      </section>
+
+      <section id="beleznica" class="mx-auto mb-8 max-w-4xl">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">📋 Beležnica Radova</h2>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
+          <div class="flex-1">
+            <label for="aktivnost-input" class="mb-1 block text-sm font-medium text-forest-800">Šta ste danas radili?</label>
+            <input
+              id="aktivnost-input"
+              type="text"
+              placeholder="npr. Prskanje kukuruza, oranje parcela..."
+              class="w-full max-w-md rounded-xl border border-forest-200 bg-white px-4 py-2.5 text-forest-900 shadow-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+            />
+          </div>
+          <button
+            id="sacuvaj-aktivnost-btn"
+            type="button"
+            class="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-5 py-2.5 text-base font-semibold text-amber-950 shadow-sm transition hover:bg-amber-600"
+          >
+            <span>📝</span> Sačuvaj aktivnost
+          </button>
+        </div>
+        <ul id="beleznica-lista" class="beleznica-lista mt-6 flex flex-col gap-4"></ul>
+        <button
+          id="obrisi-sve-beleznica-btn"
+          type="button"
+          class="mt-4 rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+        >
+          Obriši sve
+        </button>
       </section>
 
       <section class="mx-auto mb-8 mt-6 max-w-4xl pt-8">

@@ -25,3 +25,115 @@ body {
 .section-card {
   min-height: 180px;
 }
+
+/* Kalkulator – brza dugmad za litražu (10L, 12L, 16L) */
+.calc-litara-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.calc-litara-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  background: #0ea5e9;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.calc-litara-btn:hover {
+  background: #0284c7;
+  transform: translateY(-1px);
+}
+
+.calc-litara-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.4);
+}
+
+/* Rezultat kalkulatora – zeleni okvir, upadljiv */
+.doza-rezultat-box {
+  padding: 1rem 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a472a;
+  background: #dcfce7;
+  border: 3px solid #22c55e;
+  border-radius: 12px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+}
+
+/* Beležnica Radova – post-it listići */
+.beleznica-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.beleznica-listica {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+  border: 1px solid #e4d44c;
+  border-radius: 4px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.12);
+  min-height: 4rem;
+  position: relative;
+}
+
+.beleznica-listica::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(234, 179, 8, 0.4);
+  border-radius: 4px 4px 0 0;
+}
+
+.beleznica-listica-text {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #422006;
+}
+
+.beleznica-listica-datum {
+  font-size: 0.75rem;
+  color: #854d0e;
+  margin-top: 0.5rem;
+}
+
+.beleznica-obrisi-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #991b1b;
+  background: rgba(254, 202, 202, 0.8);
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.beleznica-obrisi-btn:hover {
+  background: #fecaca;
+  transform: scale(1.05);
+}
