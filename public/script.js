@@ -312,25 +312,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Beležnica Radova – localStorage
-  const BELEZNICA_KEY = "agroAsistentBeleznica";
+  // Beležnica Radova – API (MongoDB)
+  const API_BASE = "";
   const aktivnostInput = document.getElementById("aktivnost-input");
   const sacuvajAktivnostBtn = document.getElementById("sacuvaj-aktivnost-btn");
   const beleznicaLista = document.getElementById("beleznica-lista");
   const obrisiSveBeleznicaBtn = document.getElementById("obrisi-sve-beleznica-btn");
-
-  const getBeleznice = () => {
-    try {
-      const raw = localStorage.getItem(BELEZNICA_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  };
-
-  const setBeleznice = (arr) => {
-    localStorage.setItem(BELEZNICA_KEY, JSON.stringify(arr));
-  };
 
   const formatDatumVreme = (isoStr) => {
     const d = new Date(isoStr);
@@ -343,14 +330,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  const renderBeleznice = () => {
+  const ucitajBeleznice = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/beleske`);
+      if (!res.ok) throw new Error("Greška pri učitavanju.");
+      const list = await res.json();
+      return list;
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  };
+
+  const renderBeleznice = async () => {
     if (!beleznicaLista) return;
-    const list = getBeleznice();
+    const list = await ucitajBeleznice();
     beleznicaLista.innerHTML = "";
-    list.forEach((item, idx) => {
+    list.forEach((item) => {
       const li = document.createElement("li");
       li.className = "beleznica-listica";
-      li.dataset.index = String(idx);
+      li.dataset.id = item._id;
       const contentDiv = document.createElement("div");
       contentDiv.className = "flex flex-1 flex-col";
       const textEl = document.createElement("div");
@@ -366,11 +365,13 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.className = "beleznica-obrisi-btn";
       btn.setAttribute("aria-label", "Obriši belešku");
       btn.textContent = "×";
-      btn.addEventListener("click", () => {
-        const arr = getBeleznice();
-        arr.splice(idx, 1);
-        setBeleznice(arr);
-        renderBeleznice();
+      btn.addEventListener("click", async () => {
+        try {
+          const res = await fetch(`${API_BASE}/api/beleske/${item._id}`, { method: "DELETE" });
+          if (res.ok) await renderBeleznice();
+        } catch (err) {
+          console.error(err);
+        }
       });
       li.appendChild(contentDiv);
       li.appendChild(btn);
@@ -379,17 +380,22 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   if (sacuvajAktivnostBtn && aktivnostInput) {
-    sacuvajAktivnostBtn.addEventListener("click", () => {
+    sacuvajAktivnostBtn.addEventListener("click", async () => {
       const text = aktivnostInput.value.trim();
       if (!text) return;
-      const arr = getBeleznice();
-      arr.unshift({
-        text,
-        dateTime: new Date().toISOString()
-      });
-      setBeleznice(arr);
-      aktivnostInput.value = "";
-      renderBeleznice();
+      try {
+        const res = await fetch(`${API_BASE}/api/beleske`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text })
+        });
+        if (res.ok) {
+          aktivnostInput.value = "";
+          await renderBeleznice();
+        }
+      } catch (err) {
+        console.error(err);
+      }
     });
   }
 
@@ -400,15 +406,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (obrisiSveBeleznicaBtn) {
-    obrisiSveBeleznicaBtn.addEventListener("click", () => {
-      if (confirm("Da li želite da obrišete sve beleške?")) {
-        setBeleznice([]);
-        renderBeleznice();
+    obrisiSveBeleznicaBtn.addEventListener("click", async () => {
+      if (!confirm("Da li želite da obrišete sve beleške?")) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/beleske`, { method: "DELETE" });
+        if (res.ok) await renderBeleznice();
+      } catch (err) {
+        console.error(err);
       }
     });
   }
 
-  renderBeleznice();
+  await renderBeleznice();
 
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);
