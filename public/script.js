@@ -21,7 +21,7 @@ window.tailwind.config = {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const DEFAULT_LOCATION = {
     name: "Brus",
     latitude: 43.45,
