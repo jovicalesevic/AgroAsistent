@@ -330,53 +330,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   };
 
-  const ucitajBeleznice = async () => {
+  const ucitajIPrikaziBeleske = async () => {
+    if (!beleznicaLista) return;
     try {
       const res = await fetch(`${API_BASE}/api/beleske`);
       if (!res.ok) throw new Error("Greška pri učitavanju.");
       const list = await res.json();
-      return list;
+      beleznicaLista.innerHTML = "";
+      list.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "beleznica-listica";
+        li.dataset.id = item._id;
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "flex flex-1 flex-col";
+        const textEl = document.createElement("div");
+        textEl.className = "beleznica-listica-text";
+        textEl.textContent = item.text;
+        const datumEl = document.createElement("div");
+        datumEl.className = "beleznica-listica-datum";
+        datumEl.textContent = formatDatumVreme(item.dateTime);
+        contentDiv.appendChild(textEl);
+        contentDiv.appendChild(datumEl);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "beleznica-obrisi-btn";
+        btn.setAttribute("aria-label", "Obriši belešku");
+        btn.textContent = "×";
+        btn.addEventListener("click", async () => {
+          try {
+            const delRes = await fetch(`${API_BASE}/api/beleske/${item._id}`, { method: "DELETE" });
+            if (delRes.ok) await ucitajIPrikaziBeleske();
+          } catch (err) {
+            console.error(err);
+          }
+        });
+        li.appendChild(contentDiv);
+        li.appendChild(btn);
+        beleznicaLista.appendChild(li);
+      });
     } catch (err) {
       console.error(err);
-      return [];
     }
-  };
-
-  const renderBeleznice = async () => {
-    if (!beleznicaLista) return;
-    const list = await ucitajBeleznice();
-    beleznicaLista.innerHTML = "";
-    list.forEach((item) => {
-      const li = document.createElement("li");
-      li.className = "beleznica-listica";
-      li.dataset.id = item._id;
-      const contentDiv = document.createElement("div");
-      contentDiv.className = "flex flex-1 flex-col";
-      const textEl = document.createElement("div");
-      textEl.className = "beleznica-listica-text";
-      textEl.textContent = item.text;
-      const datumEl = document.createElement("div");
-      datumEl.className = "beleznica-listica-datum";
-      datumEl.textContent = formatDatumVreme(item.dateTime);
-      contentDiv.appendChild(textEl);
-      contentDiv.appendChild(datumEl);
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "beleznica-obrisi-btn";
-      btn.setAttribute("aria-label", "Obriši belešku");
-      btn.textContent = "×";
-      btn.addEventListener("click", async () => {
-        try {
-          const res = await fetch(`${API_BASE}/api/beleske/${item._id}`, { method: "DELETE" });
-          if (res.ok) await renderBeleznice();
-        } catch (err) {
-          console.error(err);
-        }
-      });
-      li.appendChild(contentDiv);
-      li.appendChild(btn);
-      beleznicaLista.appendChild(li);
-    });
   };
 
   if (sacuvajAktivnostBtn && aktivnostInput) {
@@ -390,8 +384,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           body: JSON.stringify({ text })
         });
         if (res.ok) {
+          await ucitajIPrikaziBeleske();
           aktivnostInput.value = "";
-          await renderBeleznice();
         }
       } catch (err) {
         console.error(err);
@@ -410,14 +404,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!confirm("Da li želite da obrišete sve beleške?")) return;
       try {
         const res = await fetch(`${API_BASE}/api/beleske`, { method: "DELETE" });
-        if (res.ok) await renderBeleznice();
+        if (res.ok) await ucitajIPrikaziBeleske();
       } catch (err) {
         console.error(err);
       }
     });
   }
 
-  await renderBeleznice();
+  await ucitajIPrikaziBeleske();
 
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);
