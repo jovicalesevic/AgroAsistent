@@ -4,7 +4,9 @@
     <!-- Agro Asistent -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#166534" />
     <title>Agro Asistent</title>
+    <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -471,5 +473,12 @@
         Sve na jednom mestu, prilagođeno velikom tekstu i jasnim ikonama.
       </footer>
     </div>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>
