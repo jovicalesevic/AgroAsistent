@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const sunriseEl = document.getElementById("sunrise-value");
   const sunsetEl = document.getElementById("sunset-value");
   const statusEl = document.getElementById("weather-status");
-  const forecastLinkEl = document.getElementById("forecast-link");
   const inputEl = document.getElementById("location-input");
   const buttonEl = document.getElementById("location-btn");
 
@@ -53,14 +52,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     statusEl.textContent = text;
   };
 
-  const updateForecastLink = (locationName) => {
-    const query = encodeURIComponent(locationName);
-    forecastLinkEl.href = `https://www.yr.no/en/search?q=${query}`;
-  };
-
   const fetchWeather = (location) => {
     locationEl.textContent = location.name;
-    updateForecastLink(location.name);
     setStatus("Ucitavanje...");
 
     const apiUrl =

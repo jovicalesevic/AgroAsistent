@@ -11,6 +11,16 @@
   </head>
   <body class="bg-forest-50 text-forest-900">
     <div class="min-h-screen px-5 py-8 sm:px-10 sm:py-12">
+      <header class="mb-8 text-center">
+        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-forest-700 text-3xl text-white">
+          🌾
+        </div>
+        <h1 class="text-3xl font-semibold sm:text-4xl">Agro Asistent</h1>
+        <p class="mx-auto mt-2 max-w-xl text-lg text-forest-700 sm:text-xl">
+          Jednostavna početna stranica sa velikim ikonama i krupnim tekstom.
+        </p>
+      </header>
+
       <div class="weather-panel mb-5 px-4 py-3 text-forest-900 shadow-sm sm:px-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -49,12 +59,12 @@
             </div>
             <a
               id="forecast-link"
-              href="https://www.yr.no/en/search?q=Brus"
+              href="https://www.hidmet.gov.rs/"
               target="_blank"
               rel="noopener noreferrer"
-              class="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+              class="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700"
             >
-              Detaljna prognoza
+              RHMZ Srbije
             </a>
             <button
               id="yrno-btn"
@@ -84,59 +94,6 @@
           Sačuvaj
         </button>
       </div>
-
-      <section id="kalkulator" class="mx-auto mb-8 max-w-4xl rounded-2xl border-2 border-sky-200 bg-sky-100/90 p-6 shadow-md">
-        <h2 class="mb-4 text-2xl font-semibold text-forest-900">🧮 Kalkulator za prskanje</h2>
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
-          <div class="flex flex-col gap-1">
-            <label for="prskalica-litara" class="text-sm font-medium text-forest-800">Veličina prskalice (L):</label>
-            <div class="calc-litara-buttons mb-1.5 flex flex-wrap gap-3">
-              <button type="button" data-litara="10" class="calc-litara-btn">10L</button>
-              <button type="button" data-litara="12" class="calc-litara-btn">12L</button>
-              <button type="button" data-litara="16" class="calc-litara-btn">16L</button>
-            </div>
-            <input
-              id="prskalica-litara"
-              type="number"
-              inputmode="decimal"
-              min="1"
-              step="any"
-              value="10"
-              placeholder="10"
-              class="w-full max-w-xs rounded-xl border border-forest-200 bg-white px-3 py-2 text-forest-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
-            />
-          </div>
-          <div class="flex flex-col gap-1">
-            <label for="doza-na-100l" class="text-sm font-medium text-forest-800">Preporučena doza na 100L (g ili ml):</label>
-            <input
-              id="doza-na-100l"
-              type="number"
-              inputmode="decimal"
-              min="0"
-              step="any"
-              placeholder="npr. 50"
-              class="w-full max-w-xs rounded-xl border border-forest-200 bg-white px-3 py-2 text-forest-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
-            />
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <button
-              id="izracunaj-doza-btn"
-              type="button"
-              class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-sky-700"
-            >
-              <span>🧪</span> Izračunaj
-            </button>
-            <button
-              id="reset-doza-btn"
-              type="button"
-              class="inline-flex items-center gap-2 rounded-xl bg-gray-500 px-5 py-2.5 text-base font-semibold text-white transition hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
-            >
-              <span>🧹</span> Reset
-            </button>
-          </div>
-        </div>
-        <div id="doza-rezultat" class="doza-rezultat-box mt-4 hidden"></div>
-      </section>
 
       <section class="mx-auto mb-8 max-w-4xl">
         <h2 class="mb-4 text-2xl font-semibold text-forest-900">Lokalni Resursi</h2>
@@ -170,7 +127,9 @@
           >
             <div class="flex flex-col items-start gap-4">
               <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-3xl text-white">
-                <span>🐾</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6 text-white fill-current" aria-hidden="true">
+                  <path d="M226.5 92.9c14.3 42.9-.3 86.2-32.6 96.8s-70.1-15.6-84.4-58.5s.3-86.2 32.6-96.8s70.1 15.6 84.4 58.5zM100.4 198.6c18.9 32.4 14.3 70.1-10.2 84.1s-59.7-.9-78.5-33.3S-2.7 179.3 21.8 165.3s59.7 .9 78.5 33.3zM69.2 401.2C121.6 259.9 214.7 224 256 224s134.4 35.9 186.8 177.2c3.6 9.7 5.2 20.1 5.2 30.5v1.6c0 25.8-20.9 46.7-46.7 46.7c-11.5 0-22.9-1.4-34-4.2l-88-22c-15.3-3.8-31.3-3.8-46.6 0l-88 22c-11.1 2.8-22.5 4.2-34 4.2C84.9 480 64 459.1 64 433.3v-1.6c0-10.4 1.6-20.8 5.2-30.5zM421.8 282.7c-24.5-14-29.1-51.7-10.2-84.1s54-47.3 78.5-33.3s29.1 51.7 10.2 84.1s-54 47.3-78.5 33.3zM310.1 189.7c-32.3-10.6-46.9-53.9-32.6-96.8s52.1-69.1 84.4-58.5s46.9 53.9 32.6 96.8s-52.1 69.1-84.4 58.5z"/>
+                </svg>
               </div>
               <div>
                 <h3 class="text-2xl font-semibold text-forest-900">Veterinarske Stanice</h3>
@@ -182,41 +141,35 @@
                   type="button"
                   class="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
                 >
-                  <span class="text-xl">🐾</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-5 h-5 text-white fill-current shrink-0" aria-hidden="true">
+                    <path d="M226.5 92.9c14.3 42.9-.3 86.2-32.6 96.8s-70.1-15.6-84.4-58.5s.3-86.2 32.6-96.8s70.1 15.6 84.4 58.5zM100.4 198.6c18.9 32.4 14.3 70.1-10.2 84.1s-59.7-.9-78.5-33.3S-2.7 179.3 21.8 165.3s59.7 .9 78.5 33.3zM69.2 401.2C121.6 259.9 214.7 224 256 224s134.4 35.9 186.8 177.2c3.6 9.7 5.2 20.1 5.2 30.5v1.6c0 25.8-20.9 46.7-46.7 46.7c-11.5 0-22.9-1.4-34-4.2l-88-22c-15.3-3.8-31.3-3.8-46.6 0l-88 22c-11.1 2.8-22.5 4.2-34 4.2C84.9 480 64 459.1 64 433.3v-1.6c0-10.4 1.6-20.8 5.2-30.5zM421.8 282.7c-24.5-14-29.1-51.7-10.2-84.1s54-47.3 78.5-33.3s29.1 51.7 10.2 84.1s-54 47.3-78.5 33.3zM310.1 189.7c-32.3-10.6-46.9-53.9-32.6-96.8s52.1-69.1 84.4-58.5s46.9 53.9 32.6 96.8s-52.1 69.1-84.4 58.5z"/>
+                  </svg>
                   Pronađi veterinara
                 </button>
               </div>
             </div>
           </div>
 
-          <div class="rounded-2xl border border-forest-200 bg-white p-6 shadow-sm">
+          <div
+            class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
             <div class="flex flex-col items-start gap-4">
-              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-4xl text-white">
-                🧴
+              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-700 text-3xl text-white">
+                <span>🛒</span>
               </div>
               <div>
-                <h3 class="text-2xl font-semibold text-forest-900">Agromarket / Galenika</h3>
+                <h3 class="text-2xl font-semibold text-forest-900">Pijace</h3>
                 <p class="mt-2 text-lg text-forest-700">
-                  Direktni linkovi za proveru preparata.
+                  Pretraga pijaca u Brusu.
                 </p>
-                <div class="mt-4 flex flex-col gap-3">
-                  <a
-                    href="https://www.agromarket.rs/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="rounded-xl bg-emerald-700 px-4 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
-                  >
-                    Agromarket
-                  </a>
-                  <a
-                    href="https://www.galenika.rs/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="rounded-xl bg-emerald-700 px-4 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
-                  >
-                    Galenika
-                  </a>
-                </div>
+                <a
+                  href="https://www.google.com/maps/search/pijaca+Brus"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-lg font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+                >
+                  Pronađi pijacu
+                </a>
               </div>
             </div>
           </div>
@@ -224,23 +177,39 @@
       </section>
 
       <section class="mx-auto mb-8 max-w-4xl">
-        <h2 class="mb-4 text-2xl font-semibold text-forest-900">Subvencije i eAgrar</h2>
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">eAgrar, subvencije i Poljoprivredne stručne službe</h2>
+        <div class="grid grid-cols-4 gap-2">
+          <a
+            href="https://eagrar.gov.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-full min-h-[3.5rem] items-center justify-center rounded-2xl bg-yellow-500 px-2 py-3 text-center text-sm font-semibold leading-tight text-gray-900 shadow-sm transition hover:bg-yellow-600 break-words"
+          >
+            eAgrar
+          </a>
           <a
             href="https://epodsticaji.eagrar.gov.rs/"
             target="_blank"
             rel="noopener noreferrer"
-            class="flex-1 rounded-2xl bg-yellow-500 px-6 py-5 text-center text-xl font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-600"
+            class="flex h-full min-h-[3.5rem] items-center justify-center rounded-2xl bg-yellow-500 px-2 py-3 text-center text-sm font-semibold leading-tight text-gray-900 shadow-sm transition hover:bg-yellow-600 break-words"
           >
-            Proveri ePodsticaje (eAgrar)
+            ePodsticaji
           </a>
           <a
             href="https://uap.gov.rs/"
             target="_blank"
             rel="noopener noreferrer"
-            class="rounded-2xl bg-yellow-500 px-5 py-3 text-lg font-semibold text-gray-900 shadow-sm transition hover:bg-yellow-600"
+            class="flex h-full min-h-[3.5rem] items-center justify-center rounded-2xl bg-yellow-500 px-2 py-3 text-center text-sm font-semibold leading-tight text-gray-900 shadow-sm transition hover:bg-yellow-600 break-words"
           >
             Aktuelni konkursi
+          </a>
+          <a
+            href="https://www.psss.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-full min-h-[3.5rem] items-center justify-center rounded-2xl bg-yellow-500 px-2 py-3 text-center text-sm font-semibold leading-tight text-gray-900 shadow-sm transition hover:bg-yellow-600 break-words"
+          >
+            Poljoprivredne stručne službe
           </a>
         </div>
       </section>
@@ -267,36 +236,26 @@
         </div>
       </section>
 
-      <header class="mb-8 text-center">
-        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-forest-700 text-3xl text-white">
-          🌾
-        </div>
-        <h1 class="text-3xl font-semibold sm:text-4xl">Agro Asistent</h1>
-        <p class="mx-auto mt-2 max-w-xl text-lg text-forest-700 sm:text-xl">
-          Jednostavna početna stranica sa velikim ikonama i krupnim tekstom.
-        </p>
-      </header>
-
       <section class="mx-auto mb-8 max-w-4xl">
         <h2 class="mb-4 text-2xl font-semibold text-forest-900">Glavni linkovi</h2>
         <div class="section-card-grid grid gap-5 sm:grid-cols-2">
         <a
-          href="https://uap.gov.rs/"
+          href="https://www.agromarket.rs/"
           target="_blank"
           rel="noopener noreferrer"
           class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
         >
           <div class="flex items-start gap-4">
             <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
-              🧾
+              🧴
             </div>
             <div>
-              <h2 class="text-2xl font-semibold text-forest-900">e-Agrar</h2>
+              <h2 class="text-2xl font-semibold text-forest-900">Agromarket</h2>
               <p class="mt-2 text-lg text-forest-700">
-                Prijave i evidencije za subvencije i gazdinstva.
+                Provera preparata i poljoprivrednih sredstava.
               </p>
               <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
-                Otvori servis
+                Otvori Agromarket
                 <span class="text-2xl">→</span>
               </span>
             </div>
@@ -304,73 +263,28 @@
         </a>
 
         <a
-          href="https://www.hidmet.gov.rs/"
+          href="https://www.fitofarmacija.rs/"
           target="_blank"
           rel="noopener noreferrer"
           class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
         >
           <div class="flex items-start gap-4">
             <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
-              🌦️
+              🧪
             </div>
             <div>
-              <h2 class="text-2xl font-semibold text-forest-900">Vremenska prognoza</h2>
+              <h2 class="text-2xl font-semibold text-forest-900">Galenika Fitofarmacija</h2>
               <p class="mt-2 text-lg text-forest-700">
-                Zvanična prognoza i upozorenja RHMZ.
+                Fitofarmaceutski preparati i zaštita bilja.
               </p>
               <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
-                Pogledaj prognozu
+                Otvori Fitofarmacija
                 <span class="text-2xl">→</span>
               </span>
             </div>
           </div>
         </a>
 
-        <a
-          href="https://www.kupujemprodajem.com/poljoprivreda"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-        >
-          <div class="flex items-start gap-4">
-            <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
-              🧺
-            </div>
-            <div>
-              <h2 class="text-2xl font-semibold text-forest-900">KupujemProdajem</h2>
-              <p class="mt-2 text-lg text-forest-700">
-                Poljoprivredna oprema, stočna hrana i mehanizacija.
-              </p>
-              <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
-                Idi na oglase
-                <span class="text-2xl">→</span>
-              </span>
-            </div>
-          </div>
-        </a>
-
-        <a
-          href="https://agrotv.net/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-        >
-          <div class="flex items-start gap-4">
-            <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
-              📰
-            </div>
-            <div>
-              <h2 class="text-2xl font-semibold text-forest-900">Poljoprivredne vesti</h2>
-              <p class="mt-2 text-lg text-forest-700">
-                Najnovije informacije iz poljoprivrede i agrobiznisa.
-              </p>
-              <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
-                Čitaj vesti
-                <span class="text-2xl">→</span>
-              </span>
-            </div>
-          </div>
-        </a>
         </div>
       </section>
 
@@ -425,30 +339,102 @@
               </div>
             </div>
           </a>
+        </div>
+      </section>
 
+      <section class="mx-auto mb-8 mt-6 max-w-4xl pt-8">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">Korisni portali</h2>
+        <div class="section-card-grid grid gap-5 sm:grid-cols-3">
           <a
-            href="https://www.psss.rs/"
+            href="https://agrotv.net/"
             target="_blank"
             rel="noopener noreferrer"
-            class="group rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:col-span-2"
+            class="section-card flex flex-col items-center justify-center rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
-            <div class="flex items-start gap-4">
-              <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-forest-700 text-3xl text-white">
-                📞
-              </div>
-              <div>
-                <h3 class="text-2xl font-semibold text-forest-900">Savetodavne službe</h3>
-                <p class="mt-2 text-lg text-forest-700">
-                  Kontakti poljoprivrednih savetodavnih službi po regionima.
-                </p>
-                <span class="mt-4 inline-flex items-center gap-2 text-lg font-medium text-forest-800">
-                  Pronađi kontakt
-                  <span class="text-2xl">→</span>
-                </span>
-              </div>
-            </div>
+            <span class="text-3xl">📺</span>
+            <span class="mt-3 text-xl font-semibold text-forest-900">AgroTV</span>
+          </a>
+          <a
+            href="https://www.agroklub.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="section-card flex flex-col items-center justify-center rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <span class="text-3xl">🌾</span>
+            <span class="mt-3 text-xl font-semibold text-forest-900">Agroklub</span>
+          </a>
+          <a
+            href="https://www.poljoprivrednik.net/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="section-card flex flex-col items-center justify-center rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <span class="text-3xl">🚜</span>
+            <span class="mt-3 text-xl font-semibold text-forest-900">Poljoprivrednik</span>
+          </a>
+          <a
+            href="http://www.agropress.org.rs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="section-card flex flex-col items-center justify-center rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          >
+            <span class="text-3xl">📰</span>
+            <span class="mt-3 text-xl font-semibold text-forest-900">Agropress</span>
           </a>
         </div>
+      </section>
+
+      <section id="kalkulator" class="mx-auto mb-8 max-w-4xl rounded-2xl border-2 border-sky-200 bg-sky-100/90 p-6 shadow-md">
+        <h2 class="mb-4 text-2xl font-semibold text-forest-900">🧮 Kalkulator za prskanje</h2>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="prskalica-litara" class="text-sm font-medium text-forest-800">Veličina prskalice (L):</label>
+            <div class="calc-litara-buttons mb-1.5 flex flex-wrap gap-3">
+              <button type="button" data-litara="10" class="calc-litara-btn">10L</button>
+              <button type="button" data-litara="12" class="calc-litara-btn">12L</button>
+              <button type="button" data-litara="16" class="calc-litara-btn">16L</button>
+            </div>
+            <input
+              id="prskalica-litara"
+              type="number"
+              inputmode="decimal"
+              min="1"
+              step="any"
+              value="10"
+              placeholder="10"
+              class="w-full max-w-xs rounded-xl border border-forest-200 bg-white px-3 py-2 text-forest-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="doza-na-100l" class="text-sm font-medium text-forest-800">Preporučena doza na 100L (g ili ml):</label>
+            <input
+              id="doza-na-100l"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="any"
+              placeholder="npr. 50"
+              class="w-full max-w-xs rounded-xl border border-forest-200 bg-white px-3 py-2 text-forest-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
+            />
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button
+              id="izracunaj-doza-btn"
+              type="button"
+              class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-sky-700"
+            >
+              <span>🧪</span> Izračunaj
+            </button>
+            <button
+              id="reset-doza-btn"
+              type="button"
+              class="inline-flex items-center gap-2 rounded-xl bg-gray-500 px-5 py-2.5 text-base font-semibold text-white transition hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            >
+              <span>🧹</span> Reset
+            </button>
+          </div>
+        </div>
+        <div id="doza-rezultat" class="doza-rezultat-box mt-4 hidden"></div>
       </section>
 
       <section id="beleznica" class="mx-auto mb-8 max-w-4xl">
@@ -479,39 +465,6 @@
         >
           Obriši sve
         </button>
-      </section>
-
-      <section class="mx-auto mb-8 mt-6 max-w-4xl pt-8">
-        <h2 class="mb-4 text-2xl font-semibold text-forest-900">Korisni portali</h2>
-        <div class="section-card-grid grid gap-5 sm:grid-cols-3">
-          <a
-            href="https://www.agroklub.rs/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="section-card flex flex-col items-center justify-center rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-            <span class="text-3xl">🌾</span>
-            <span class="mt-3 text-xl font-semibold text-forest-900">Agroklub</span>
-          </a>
-          <a
-            href="https://www.poljoprivrednik.net/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="section-card flex flex-col items-center justify-center rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-            <span class="text-3xl">🚜</span>
-            <span class="mt-3 text-xl font-semibold text-forest-900">Poljoprivrednik</span>
-          </a>
-          <a
-            href="http://www.agropress.org.rs/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="section-card flex flex-col items-center justify-center rounded-2xl border border-forest-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-            <span class="text-3xl">📰</span>
-            <span class="mt-3 text-xl font-semibold text-forest-900">Agropress</span>
-          </a>
-        </div>
       </section>
 
       <footer class="mx-auto mt-10 max-w-4xl text-center text-base text-forest-700">
