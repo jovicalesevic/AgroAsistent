@@ -127,12 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const reverseGeocode = (latitude, longitude) => {
-    const url =
-      "https://geocoding-api.open-meteo.com/v1/reverse?latitude=" +
-      latitude +
-      "&longitude=" +
-      longitude +
-      "&language=sr&format=json";
+    const url = `/api/location?latitude=${latitude}&longitude=${longitude}`;
     return fetch(url)
       .then((response) => {
         if (!response.ok) {
@@ -310,6 +305,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const aktivnostInput = document.getElementById("aktivnost-input");
   const sacuvajAktivnostBtn = document.getElementById("sacuvaj-aktivnost-btn");
   const beleznicaLista = document.getElementById("beleznica-lista");
+  const beleznicaKontejner = document.getElementById("beleznica-kontejner");
+  const vidiAktivnostiBtn = document.getElementById("vidi-aktivnosti-btn");
   const obrisiSveBeleznicaBtn = document.getElementById("obrisi-sve-beleznica-btn");
 
   const formatDatumVreme = (isoStr) => {
@@ -332,18 +329,33 @@ document.addEventListener("DOMContentLoaded", async () => {
       beleznicaLista.innerHTML = "";
       list.forEach((item) => {
         const li = document.createElement("li");
-        li.className = "beleznica-listica";
+        li.className = item.zavrseno ? "beleznica-listica bg-yellow-200" : "beleznica-listica";
         li.dataset.id = item._id;
         const contentDiv = document.createElement("div");
         contentDiv.className = "flex flex-1 flex-col";
         const textEl = document.createElement("div");
-        textEl.className = "beleznica-listica-text";
+        textEl.className = item.zavrseno ? "beleznica-listica-text line-through text-gray-500" : "beleznica-listica-text";
         textEl.textContent = item.text;
         const datumEl = document.createElement("div");
         datumEl.className = "beleznica-listica-datum";
         datumEl.textContent = formatDatumVreme(item.dateTime);
         contentDiv.appendChild(textEl);
         contentDiv.appendChild(datumEl);
+        const btnGroup = document.createElement("div");
+        btnGroup.className = "flex items-center gap-2 shrink-0";
+        const btnZavrsi = document.createElement("button");
+        btnZavrsi.type = "button";
+        btnZavrsi.className = "flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white transition hover:bg-emerald-700";
+        btnZavrsi.setAttribute("aria-label", item.zavrseno ? "Otkrij aktivnost" : "Završi aktivnost");
+        btnZavrsi.textContent = "✓";
+        btnZavrsi.addEventListener("click", async () => {
+          try {
+            const toggleRes = await fetch(`${API_BASE}/api/beleske/${item._id}/toggle`, { method: "PUT" });
+            if (toggleRes.ok) await ucitajIPrikaziBeleske();
+          } catch (err) {
+            console.error(err);
+          }
+        });
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "beleznica-obrisi-btn";
@@ -357,14 +369,24 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error(err);
           }
         });
+        btnGroup.appendChild(btnZavrsi);
+        btnGroup.appendChild(btn);
         li.appendChild(contentDiv);
-        li.appendChild(btn);
+        li.appendChild(btnGroup);
         beleznicaLista.appendChild(li);
       });
     } catch (err) {
       console.error(err);
     }
   };
+
+  if (vidiAktivnostiBtn && beleznicaKontejner) {
+    vidiAktivnostiBtn.addEventListener("click", () => {
+      const isHidden = beleznicaKontejner.classList.contains("hidden");
+      beleznicaKontejner.classList.toggle("hidden");
+      vidiAktivnostiBtn.textContent = isHidden ? "Sakrij aktivnosti" : "Vidi aktivnosti";
+    });
+  }
 
   if (sacuvajAktivnostBtn && aktivnostInput) {
     sacuvajAktivnostBtn.addEventListener("click", async () => {

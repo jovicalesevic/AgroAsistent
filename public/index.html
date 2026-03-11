@@ -459,14 +459,23 @@
             <span>📝</span> Sačuvaj aktivnost
           </button>
         </div>
-        <ul id="beleznica-lista" class="beleznica-lista mt-6 flex flex-col gap-4"></ul>
         <button
-          id="obrisi-sve-beleznica-btn"
+          id="vidi-aktivnosti-btn"
           type="button"
-          class="mt-4 rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+          class="mt-4 rounded-xl bg-amber-400 px-4 py-2 text-sm font-semibold text-amber-950 shadow-sm transition hover:bg-amber-500"
         >
-          Obriši sve
+          Vidi aktivnosti
         </button>
+        <div id="beleznica-kontejner" class="hidden">
+          <ul id="beleznica-lista" class="beleznica-lista mt-6 flex flex-col gap-4"></ul>
+          <button
+            id="obrisi-sve-beleznica-btn"
+            type="button"
+            class="mt-4 rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+          >
+            Obriši sve
+          </button>
+        </div>
       </section>
 
       <footer class="mx-auto mt-10 max-w-4xl text-center text-base text-forest-700">

@@ -8,6 +8,10 @@ const beleskaSchema = new mongoose.Schema({
   dateTime: {
     type: Date,
     default: Date.now
+  },
+  zavrseno: {
+    type: Boolean,
+    default: false
   }
 });
 

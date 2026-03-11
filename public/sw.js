@@ -1,4 +1,4 @@
-const CACHE_NAME = "agroasistent-v1";
+const CACHE_NAME = "agroasistent-v2";
 const STATIC_ASSETS = ["/", "/index.html", "/script.js", "/style.css"];
 
 self.addEventListener("install", (event) => {
@@ -24,11 +24,13 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+  if (url.pathname.startsWith("/api/")) return;
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+      if (cachedResponse) return cachedResponse;
       return fetch(event.request);
     })
   );

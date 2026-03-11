@@ -25,6 +25,27 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+app.get("/api/location", async (req, res) => {
+  try {
+    const { latitude, longitude } = req.query;
+    if (!latitude || !longitude) {
+      return res.status(400).json({ error: "latitude i longitude su obavezni." });
+    }
+    const url =
+      "https://geocoding-api.open-meteo.com/v1/reverse?latitude=" +
+      latitude +
+      "&longitude=" +
+      longitude +
+      "&language=sr&format=json";
+    const response = await fetch(url);
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Greška pri dohvatanju lokacije." });
+  }
+});
+
 // REST API za beleške
 app.get("/api/beleske", async (req, res) => {
   try {
@@ -55,6 +76,21 @@ app.delete("/api/beleske", async (req, res) => {
     res.json({ message: "Sve beleške obrisane." });
   } catch (err) {
     res.status(500).json({ error: "Greška pri brisanju beleški." });
+  }
+});
+
+app.put("/api/beleske/:id/toggle", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const beleska = await Beleska.findById(id);
+    if (!beleska) {
+      return res.status(404).json({ error: "Beleška nije pronađena." });
+    }
+    beleska.zavrseno = !beleska.zavrseno;
+    await beleska.save();
+    res.json(beleska);
+  } catch (err) {
+    res.status(500).json({ error: "Greška pri ažuriranju beleške." });
   }
 });
 
