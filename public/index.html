@@ -439,8 +439,28 @@
         <div id="doza-rezultat" class="doza-rezultat-box mt-4 hidden"></div>
       </section>
 
-      <section id="beleznica" class="mx-auto mb-8 max-w-4xl">
-        <h2 class="mb-4 text-2xl font-semibold text-forest-900">📋 Beležnica Radova</h2>
+      <section id="beleznica-parcele" class="mx-auto mb-8 max-w-4xl">
+        <div class="mb-4 flex items-center gap-2">
+          <h2 class="text-2xl font-semibold text-forest-900">📋 Beležnica i Parcele</h2>
+          <div class="ml-4 flex gap-2">
+            <button
+              id="tab-beleznica"
+              type="button"
+              class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-amber-950 transition hover:bg-amber-600"
+            >
+              Beležnica
+            </button>
+            <button
+              id="tab-parcele"
+              type="button"
+              class="rounded-xl bg-forest-200 px-4 py-2 text-sm font-semibold text-forest-800 transition hover:bg-forest-300"
+            >
+              Moje Parcele
+            </button>
+          </div>
+        </div>
+
+        <div id="beleznica-view">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
           <div class="flex-1">
             <label for="aktivnost-input" class="mb-1 block text-sm font-medium text-forest-800">Šta ste danas radili?</label>
@@ -475,6 +495,24 @@
           >
             Obriši sve
           </button>
+        </div>
+        </div>
+
+        <div id="parcele-view" class="hidden">
+          <textarea
+            id="pasteArea"
+            rows="8"
+            placeholder="Nalepi tabelu iz eAgrara ovde..."
+            class="w-full rounded-xl border border-forest-200 bg-white px-4 py-3 text-forest-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          ></textarea>
+          <button
+            id="uvezi-parcele-btn"
+            type="button"
+            class="mt-4 rounded-xl bg-emerald-600 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+          >
+            Uvezi parcele
+          </button>
+          <div id="parceleList" class="mt-6 flex flex-col gap-4"></div>
         </div>
       </section>
 

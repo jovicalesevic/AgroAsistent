@@ -1,0 +1,29 @@
+const mongoose = require("mongoose");
+
+const parcelaSchema = new mongoose.Schema({
+  katastarska_opstina: {
+    type: String,
+    required: true
+  },
+  broj_parcele: {
+    type: String,
+    required: true
+  },
+  naziv_parcele: {
+    type: String,
+    default: ""
+  },
+  povrsina_ha: {
+    type: Number,
+    required: true
+  },
+  kultura: {
+    type: String
+  },
+  aktivna_obrada: {
+    type: Boolean,
+    default: true
+  }
+});
+
+module.exports = mongoose.model("Parcela", parcelaSchema);

@@ -426,6 +426,118 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  const tabBeleznica = document.getElementById("tab-beleznica");
+  const tabParcele = document.getElementById("tab-parcele");
+  const beleznicaView = document.getElementById("beleznica-view");
+  const parceleView = document.getElementById("parcele-view");
+
+  if (tabBeleznica && tabParcele && beleznicaView && parceleView) {
+    tabBeleznica.addEventListener("click", () => {
+      beleznicaView.classList.remove("hidden");
+      parceleView.classList.add("hidden");
+      tabBeleznica.classList.add("bg-amber-500");
+      tabBeleznica.classList.remove("bg-forest-200");
+      tabParcele.classList.remove("bg-amber-500");
+      tabParcele.classList.add("bg-forest-200");
+    });
+    tabParcele.addEventListener("click", () => {
+      parceleView.classList.remove("hidden");
+      beleznicaView.classList.add("hidden");
+      tabParcele.classList.add("bg-amber-500");
+      tabParcele.classList.remove("bg-forest-200");
+      tabBeleznica.classList.remove("bg-amber-500");
+      tabBeleznica.classList.add("bg-forest-200");
+      fetchParcele();
+    });
+  }
+
+  const pasteArea = document.getElementById("pasteArea");
+  const uveziParceleBtn = document.getElementById("uvezi-parcele-btn");
+  const parceleList = document.getElementById("parceleList");
+
+  const fetchParcele = async () => {
+    if (!parceleList) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/parcels`);
+      if (!res.ok) throw new Error("Greška pri učitavanju.");
+      const parcele = await res.json();
+      parceleList.innerHTML = "";
+      parcele.forEach((p) => {
+        const card = document.createElement("div");
+        card.className =
+          "flex flex-col gap-2 rounded-xl border border-forest-200 bg-white p-4 shadow-sm";
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="font-semibold text-forest-900">${p.katastarska_opstina} – ${p.broj_parcele}</div>
+              ${p.naziv_parcele ? `<div class="text-sm text-forest-700">${p.naziv_parcele}</div>` : ""}
+            </div>
+            <span class="shrink-0 rounded-lg bg-forest-100 px-2 py-1 text-sm font-medium text-forest-800">${p.povrsina_ha} ha</span>
+          </div>
+          ${p.kultura ? `<div class="text-sm text-forest-600">${p.kultura}</div>` : ""}
+        `;
+        const btnUredi = document.createElement("button");
+        btnUredi.type = "button";
+        btnUredi.className = "mt-2 self-start rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-blue-700";
+        btnUredi.textContent = "Uredi";
+        btnUredi.addEventListener("click", async () => {
+          const noviNaziv = prompt("Unesi lokalni naziv parcele:", p.naziv_parcele || "");
+          if (noviNaziv === null) return;
+          try {
+            const putRes = await fetch(`${API_BASE}/api/parcels/${p._id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ naziv_parcele: noviNaziv.trim() })
+            });
+            if (putRes.ok) await fetchParcele();
+          } catch (err) {
+            console.error(err);
+          }
+        });
+        card.appendChild(btnUredi);
+        parceleList.appendChild(card);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (uveziParceleBtn && pasteArea) {
+    uveziParceleBtn.addEventListener("click", async () => {
+      const text = pasteArea.value.trim();
+      if (!text) return;
+      const redovi = text.split("\n");
+      const parcele = [];
+      for (const red of redovi) {
+        if (!red.trim() || red.includes("Катастарска")) continue;
+        const kolona = red.split("\t");
+        if (kolona.length < 6) continue;
+        parcele.push({
+          katastarska_opstina: kolona[0] || "",
+          broj_parcele: kolona[1] || "",
+          naziv_parcele: kolona[2] || "",
+          povrsina_ha: parseFloat((kolona[3] || "0").replace(",", ".")) || 0,
+          kultura: kolona[5] || "",
+          aktivna_obrada: true
+        });
+      }
+      if (parcele.length === 0) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/parcels/import`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(parcele)
+        });
+        if (res.ok) {
+          pasteArea.value = "";
+          await fetchParcele();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  }
+
   await ucitajIPrikaziBeleske();
 
   if (!navigator.geolocation) {

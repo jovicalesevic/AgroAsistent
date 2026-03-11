@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
 const Beleska = require("./models/Beleska");
+const Parcela = require("./models/Parcela");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -104,6 +105,45 @@ app.delete("/api/beleske/:id", async (req, res) => {
     res.json({ message: "Beleška obrisana." });
   } catch (err) {
     res.status(500).json({ error: "Greška pri brisanju beleške." });
+  }
+});
+
+// REST API za parcele
+app.get("/api/parcels", async (req, res) => {
+  try {
+    const parcele = await Parcela.find();
+    res.json(parcele);
+  } catch (err) {
+    res.status(500).json({ error: "Greška pri dohvatanju parcela." });
+  }
+});
+
+app.post("/api/parcels/import", async (req, res) => {
+  try {
+    const parcele = req.body;
+    if (!Array.isArray(parcele)) {
+      return res.status(400).json({ error: "Očekivan je niz objekata parcela." });
+    }
+    const result = await Parcela.insertMany(parcele);
+    res.status(201).json({ message: "Parcele uspešno uvezene.", count: result.length });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Greška pri uvozu parcela." });
+  }
+});
+
+app.put("/api/parcels/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { naziv_parcele } = req.body;
+    const parcela = await Parcela.findByIdAndUpdate(id, { naziv_parcele: naziv_parcele || "" }, { new: true });
+    if (!parcela) {
+      return res.status(404).json({ error: "Parcela nije pronađena." });
+    }
+    res.json(parcela);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Greška pri ažuriranju parcele." });
   }
 });
 
