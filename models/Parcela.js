@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const parcelaSchema = new mongoose.Schema({
+  vlasnik_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: false
+  },
   katastarska_opstina: {
     type: String,
     required: true

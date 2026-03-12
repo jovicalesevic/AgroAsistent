@@ -3,8 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = "agroasistent_tajna_sifra_123";
+
+const { protect } = require("./middleware/auth");
 const Beleska = require("./models/Beleska");
 const Parcela = require("./models/Parcela");
+const User = require("./models/User");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,6 +31,57 @@ if (process.env.MONGO_URI) {
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Autentifikacija
+app.post("/api/auth/register", async (req, res) => {
+  try {
+    const { ime, email, password } = req.body;
+    if (!ime || !email || !password) {
+      return res.status(400).json({ error: "ime, email i password su obavezni." });
+    }
+    const postojecikorisnik = await User.findOne({ email });
+    if (postojecikorisnik) {
+      return res.status(400).json({ error: "Korisnik sa ovim emailom već postoji." });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = new User({ ime, email, password: hashedPassword });
+    await user.save();
+    res.status(201).json({ message: "Nalog uspešno kreiran." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Greška pri registraciji." });
+  }
+});
+
+app.post("/api/auth/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: "email i password su obavezni." });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: "Pogrešan email ili lozinka." });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Pogrešan email ili lozinka." });
+    }
+    const token = jwt.sign({ id: user._id }, JWT_SECRET);
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        ime: user.ime,
+        email: user.email
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Greška pri prijavi." });
+  }
 });
 
 app.get("/api/location", async (req, res) => {
@@ -47,23 +105,23 @@ app.get("/api/location", async (req, res) => {
   }
 });
 
-// REST API za beleške
-app.get("/api/beleske", async (req, res) => {
+// REST API za beleške (zaštićeno)
+app.get("/api/beleske", protect, async (req, res) => {
   try {
-    const beleske = await Beleska.find().sort({ dateTime: -1 });
+    const beleske = await Beleska.find({ vlasnik_id: req.user.id }).sort({ dateTime: -1 });
     res.json(beleske);
   } catch (err) {
     res.status(500).json({ error: "Greška pri dohvatanju beleški." });
   }
 });
 
-app.post("/api/beleske", async (req, res) => {
+app.post("/api/beleske", protect, async (req, res) => {
   try {
     const { text } = req.body;
     if (!text || !text.trim()) {
       return res.status(400).json({ error: "Tekst beleške je obavezan." });
     }
-    const beleska = new Beleska({ text: text.trim() });
+    const beleska = new Beleska({ text: text.trim(), vlasnik_id: req.user.id });
     await beleska.save();
     res.status(201).json(beleska);
   } catch (err) {
@@ -71,19 +129,19 @@ app.post("/api/beleske", async (req, res) => {
   }
 });
 
-app.delete("/api/beleske", async (req, res) => {
+app.delete("/api/beleske", protect, async (req, res) => {
   try {
-    await Beleska.deleteMany({});
+    await Beleska.deleteMany({ vlasnik_id: req.user.id });
     res.json({ message: "Sve beleške obrisane." });
   } catch (err) {
     res.status(500).json({ error: "Greška pri brisanju beleški." });
   }
 });
 
-app.put("/api/beleske/:id/toggle", async (req, res) => {
+app.put("/api/beleske/:id/toggle", protect, async (req, res) => {
   try {
     const { id } = req.params;
-    const beleska = await Beleska.findById(id);
+    const beleska = await Beleska.findOne({ _id: id, vlasnik_id: req.user.id });
     if (!beleska) {
       return res.status(404).json({ error: "Beleška nije pronađena." });
     }
@@ -95,10 +153,10 @@ app.put("/api/beleske/:id/toggle", async (req, res) => {
   }
 });
 
-app.delete("/api/beleske/:id", async (req, res) => {
+app.delete("/api/beleske/:id", protect, async (req, res) => {
   try {
     const { id } = req.params;
-    const beleska = await Beleska.findByIdAndDelete(id);
+    const beleska = await Beleska.findOneAndDelete({ _id: id, vlasnik_id: req.user.id });
     if (!beleska) {
       return res.status(404).json({ error: "Beleška nije pronađena." });
     }
@@ -108,35 +166,44 @@ app.delete("/api/beleske/:id", async (req, res) => {
   }
 });
 
-// REST API za parcele
-app.get("/api/parcels", async (req, res) => {
+// REST API za parcele (zaštićeno)
+app.get("/api/parcels", protect, async (req, res) => {
   try {
-    const parcele = await Parcela.find();
+    const parcele = await Parcela.find({ vlasnik_id: req.user.id });
     res.json(parcele);
   } catch (err) {
     res.status(500).json({ error: "Greška pri dohvatanju parcela." });
   }
 });
 
-app.post("/api/parcels/import", async (req, res) => {
+app.post("/api/parcels/import", protect, async (req, res) => {
   try {
     const parcele = req.body;
     if (!Array.isArray(parcele)) {
       return res.status(400).json({ error: "Očekivan je niz objekata parcela." });
     }
-    const result = await Parcela.insertMany(parcele);
-    res.status(201).json({ message: "Parcele uspešno uvezene.", count: result.length });
+    const vlasnikId = req.user.id;
+    const parceleSaVlasnikom = parcele.map((p) => ({
+      ...p,
+      vlasnik_id: vlasnikId
+    }));
+    const result = await Parcela.insertMany(parceleSaVlasnikom);
+    return res.status(201).json({ message: "Parcele uspešno uvezene.", count: result.length });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Greška pri uvozu parcela." });
+    return res.status(500).json({ message: err.message || "Greška pri uvozu parcela." });
   }
 });
 
-app.put("/api/parcels/:id", async (req, res) => {
+app.put("/api/parcels/:id", protect, async (req, res) => {
   try {
     const { id } = req.params;
     const { naziv_parcele } = req.body;
-    const parcela = await Parcela.findByIdAndUpdate(id, { naziv_parcele: naziv_parcele || "" }, { new: true });
+    const parcela = await Parcela.findOneAndUpdate(
+      { _id: id, vlasnik_id: req.user.id },
+      { naziv_parcele: naziv_parcele || "" },
+      { new: true }
+    );
     if (!parcela) {
       return res.status(404).json({ error: "Parcela nije pronađena." });
     }

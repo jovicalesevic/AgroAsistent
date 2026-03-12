@@ -21,7 +21,142 @@ window.tailwind.config = {
   }
 };
 
+const API_BASE = "";
+
+function getAuthHeaders() {
+  const headers = { "Content-Type": "application/json" };
+  const token = localStorage.getItem("token");
+  if (token) headers["Authorization"] = "Bearer " + token;
+  return headers;
+}
+
+function handle401(res) {
+  if (res.status === 401) {
+    localStorage.removeItem("token");
+    location.reload();
+    return true;
+  }
+  return false;
+}
+
+function checkAuth() {
+  const token = localStorage.getItem("token");
+  const authContainer = document.getElementById("authContainer");
+  const beleznicaParceleSection = document.getElementById("beleznica-parcele");
+  if (token) {
+    if (authContainer) authContainer.classList.add("hidden");
+    if (beleznicaParceleSection) beleznicaParceleSection.classList.remove("hidden");
+  } else {
+    if (authContainer) authContainer.classList.remove("hidden");
+    if (beleznicaParceleSection) beleznicaParceleSection.classList.add("hidden");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+  checkAuth();
+
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      location.reload();
+    });
+  }
+
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  const authMessage = document.getElementById("authMessage");
+  const authTabLogin = document.getElementById("auth-tab-login");
+  const authTabRegister = document.getElementById("auth-tab-register");
+
+  const showAuthMessage = (text, isError = false) => {
+    if (!authMessage) return;
+    authMessage.textContent = text;
+    authMessage.classList.remove("hidden", "text-green-600", "text-red-600");
+    authMessage.classList.add(isError ? "text-red-600" : "text-green-600");
+  };
+
+  const hideAuthMessage = () => {
+    if (authMessage) {
+      authMessage.classList.add("hidden");
+      authMessage.textContent = "";
+    }
+  };
+
+  if (authTabLogin && authTabRegister && loginForm && registerForm) {
+    authTabLogin.addEventListener("click", () => {
+      loginForm.classList.remove("hidden");
+      registerForm.classList.add("hidden");
+      authTabLogin.classList.add("bg-amber-500");
+      authTabLogin.classList.remove("bg-forest-200");
+      authTabRegister.classList.remove("bg-amber-500");
+      authTabRegister.classList.add("bg-forest-200");
+      hideAuthMessage();
+    });
+    authTabRegister.addEventListener("click", () => {
+      registerForm.classList.remove("hidden");
+      loginForm.classList.add("hidden");
+      authTabRegister.classList.add("bg-amber-500");
+      authTabRegister.classList.remove("bg-forest-200");
+      authTabLogin.classList.remove("bg-amber-500");
+      authTabLogin.classList.add("bg-forest-200");
+      hideAuthMessage();
+    });
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideAuthMessage();
+      const email = document.getElementById("login-email")?.value?.trim();
+      const password = document.getElementById("login-password")?.value;
+      if (!email || !password) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          localStorage.setItem("token", data.token);
+          document.getElementById("authContainer")?.classList.add("hidden");
+          document.getElementById("beleznica-parcele")?.classList.remove("hidden");
+        } else {
+          showAuthMessage(data.error || "Greška pri prijavi.", true);
+        }
+      } catch (err) {
+        showAuthMessage("Greška pri prijavi.", true);
+      }
+    });
+  }
+
+  if (registerForm) {
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideAuthMessage();
+      const ime = document.getElementById("register-ime")?.value?.trim();
+      const email = document.getElementById("register-email")?.value?.trim();
+      const password = document.getElementById("register-password")?.value;
+      if (!ime || !email || !password) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ime, email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showAuthMessage("Uspešno ste se registrovali. Sada se možete prijaviti.");
+        } else {
+          showAuthMessage(data.error || "Greška pri registraciji.", true);
+        }
+      } catch (err) {
+        showAuthMessage("Greška pri registraciji.", true);
+      }
+    });
+  }
+
   const DEFAULT_LOCATION = {
     name: "Brus",
     latitude: 43.45,
@@ -127,12 +262,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const reverseGeocode = (latitude, longitude) => {
-    const url = `/api/location?latitude=${latitude}&longitude=${longitude}`;
-    return fetch(url)
+    const url = `${API_BASE}/api/location?latitude=${latitude}&longitude=${longitude}`;
+    return fetch(url, { headers: getAuthHeaders() })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Bad response");
-        }
+        if (handle401(response)) throw new Error("Unauthorized");
+        if (!response.ok) throw new Error("Bad response");
         return response.json();
       })
       .then((data) => {
@@ -301,7 +435,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Beležnica Radova – API (MongoDB)
-  const API_BASE = "";
   const aktivnostInput = document.getElementById("aktivnost-input");
   const sacuvajAktivnostBtn = document.getElementById("sacuvaj-aktivnost-btn");
   const beleznicaLista = document.getElementById("beleznica-lista");
@@ -323,7 +456,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const ucitajIPrikaziBeleske = async () => {
     if (!beleznicaLista) return;
     try {
-      const res = await fetch(`${API_BASE}/api/beleske`);
+      const res = await fetch(`${API_BASE}/api/beleske`, { headers: getAuthHeaders() });
+      if (handle401(res)) return;
       if (!res.ok) throw new Error("Greška pri učitavanju.");
       const list = await res.json();
       beleznicaLista.innerHTML = "";
@@ -350,7 +484,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnZavrsi.textContent = "✓";
         btnZavrsi.addEventListener("click", async () => {
           try {
-            const toggleRes = await fetch(`${API_BASE}/api/beleske/${item._id}/toggle`, { method: "PUT" });
+            const toggleRes = await fetch(`${API_BASE}/api/beleske/${item._id}/toggle`, {
+              method: "PUT",
+              headers: getAuthHeaders()
+            });
+            if (handle401(toggleRes)) return;
             if (toggleRes.ok) await ucitajIPrikaziBeleske();
           } catch (err) {
             console.error(err);
@@ -363,7 +501,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn.textContent = "×";
         btn.addEventListener("click", async () => {
           try {
-            const delRes = await fetch(`${API_BASE}/api/beleske/${item._id}`, { method: "DELETE" });
+            const delRes = await fetch(`${API_BASE}/api/beleske/${item._id}`, {
+              method: "DELETE",
+              headers: getAuthHeaders()
+            });
+            if (handle401(delRes)) return;
             if (delRes.ok) await ucitajIPrikaziBeleske();
           } catch (err) {
             console.error(err);
@@ -395,9 +537,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         const res = await fetch(`${API_BASE}/api/beleske`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: getAuthHeaders(),
           body: JSON.stringify({ text })
         });
+        if (handle401(res)) return;
         if (res.ok) {
           await ucitajIPrikaziBeleske();
           aktivnostInput.value = "";
@@ -418,7 +561,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     obrisiSveBeleznicaBtn.addEventListener("click", async () => {
       if (!confirm("Da li želite da obrišete sve beleške?")) return;
       try {
-        const res = await fetch(`${API_BASE}/api/beleske`, { method: "DELETE" });
+        const res = await fetch(`${API_BASE}/api/beleske`, {
+          method: "DELETE",
+          headers: getAuthHeaders()
+        });
+        if (handle401(res)) return;
         if (res.ok) await ucitajIPrikaziBeleske();
       } catch (err) {
         console.error(err);
@@ -428,8 +575,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const tabBeleznica = document.getElementById("tab-beleznica");
   const tabParcele = document.getElementById("tab-parcele");
-  const beleznicaView = document.getElementById("beleznica-view");
-  const parceleView = document.getElementById("parcele-view");
+  const beleznicaView = document.getElementById("beleznicaContainer");
+  const parceleView = document.getElementById("parceleContainer");
 
   if (tabBeleznica && tabParcele && beleznicaView && parceleView) {
     tabBeleznica.addEventListener("click", () => {
@@ -458,7 +605,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const fetchParcele = async () => {
     if (!parceleList) return;
     try {
-      const res = await fetch(`${API_BASE}/api/parcels`);
+      const res = await fetch(`${API_BASE}/api/parcels`, { headers: getAuthHeaders() });
+      if (handle401(res)) return;
       if (!res.ok) throw new Error("Greška pri učitavanju.");
       const parcele = await res.json();
       parceleList.innerHTML = "";
@@ -486,9 +634,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           try {
             const putRes = await fetch(`${API_BASE}/api/parcels/${p._id}`, {
               method: "PUT",
-              headers: { "Content-Type": "application/json" },
+              headers: getAuthHeaders(),
               body: JSON.stringify({ naziv_parcele: noviNaziv.trim() })
             });
+            if (handle401(putRes)) return;
             if (putRes.ok) await fetchParcele();
           } catch (err) {
             console.error(err);
@@ -504,41 +653,67 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (uveziParceleBtn && pasteArea) {
     uveziParceleBtn.addEventListener("click", async () => {
+      console.log("1. Dugme za uvoz je uspešno kliknuto!");
       const text = pasteArea.value.trim();
+      console.log("2. Pročitan tekst iz polja:", text);
       if (!text) return;
-      const redovi = text.split("\n");
+      const lines = text.split("\n").map((l) => l.trim()).filter((l) => l.length > 0);
+      if (lines[0] && lines[0].includes("Катастарска")) {
+        lines.shift();
+      }
       const parcele = [];
-      for (const red of redovi) {
-        if (!red.trim() || red.includes("Катастарска")) continue;
-        const kolona = red.split("\t");
-        if (kolona.length < 6) continue;
+      for (let i = 0; i < lines.length; i += 3) {
+        if (i + 2 >= lines.length) break;
+        const match = lines[i].match(/\t\s*([0-9/]+)\s*\t/);
+        const broj_parcele = match ? match[1].trim() : "";
+        const povrsina = parseFloat(lines[i + 1].replace(",", ".")) || 0;
+        const kultura = (lines[i + 2].split("\t")[0] || "").trim();
+        const katastarska_opstina = (lines[i].split("\t")[0] || "").trim();
         parcele.push({
-          katastarska_opstina: kolona[0] || "",
-          broj_parcele: kolona[1] || "",
-          naziv_parcele: kolona[2] || "",
-          povrsina_ha: parseFloat((kolona[3] || "0").replace(",", ".")) || 0,
-          kultura: kolona[5] || "",
+          katastarska_opstina,
+          broj_parcele,
+          povrsina_ha: povrsina,
+          kultura,
+          naziv_parcele: "",
           aktivna_obrada: true
         });
       }
-      if (parcele.length === 0) return;
+      console.log("3. Rezultat parsiranja (niz parcela):", parcele);
+      if (parcele.length === 0) {
+        console.log("Niz je prazan, prekidam funkciju!");
+        return;
+      }
+      uveziParceleBtn.disabled = true;
+      document.body.style.cursor = "wait";
       try {
+        const token = localStorage.getItem("token");
+        console.log("4. Šaljem podatke na server sa tokenom...");
         const res = await fetch(`${API_BASE}/api/parcels/import`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token
+          },
           body: JSON.stringify(parcele)
         });
+        console.log("5. Odgovor sa servera stigao:", res);
+        if (handle401(res)) return;
         if (res.ok) {
           pasteArea.value = "";
           await fetchParcele();
         }
       } catch (err) {
-        console.error(err);
+        console.error("GREŠKA U KODU:", err);
+      } finally {
+        uveziParceleBtn.disabled = false;
+        document.body.style.cursor = "default";
       }
     });
   }
 
-  await ucitajIPrikaziBeleske();
+  if (localStorage.getItem("token")) {
+    await ucitajIPrikaziBeleske();
+  }
 
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);
