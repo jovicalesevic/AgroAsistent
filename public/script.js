@@ -39,6 +39,27 @@ function handle401(res) {
   return false;
 }
 
+async function prikaziOglas() {
+  const container = document.getElementById("oglas-kontejner");
+  const sadrzajEl = document.getElementById("oglas-sadrzaj");
+  if (!container || !sadrzajEl) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/oglasi/aktivni`);
+    const data = await res.json();
+    if (!data || !res.ok) {
+      container.style.display = "none";
+      document.body.style.paddingBottom = "";
+      return;
+    }
+    sadrzajEl.innerHTML = data.sadrzaj || "";
+    container.style.display = "block";
+    document.body.style.paddingBottom = "60px";
+  } catch (err) {
+    container.style.display = "none";
+    document.body.style.paddingBottom = "";
+  }
+}
+
 function checkAuth() {
   const token = localStorage.getItem("token");
   const authContainer = document.getElementById("authContainer");
@@ -54,6 +75,8 @@ function checkAuth() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   checkAuth();
+  prikaziOglas();
+  setInterval(prikaziOglas, 30000);
 
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {

@@ -10,6 +10,7 @@ const JWT_SECRET = "agroasistent_tajna_sifra_123";
 
 const { protect } = require("./middleware/auth");
 const Beleska = require("./models/Beleska");
+const Oglas = require("./models/Oglas");
 const Parcela = require("./models/Parcela");
 const User = require("./models/User");
 
@@ -81,6 +82,27 @@ app.post("/api/auth/login", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Greška pri prijavi." });
+  }
+});
+
+app.get("/api/oglasi/aktivni", async (req, res) => {
+  try {
+    const now = new Date();
+    const oglasi = await Oglas.find({
+      aktivan: true,
+      $and: [
+        { $or: [{ vaziOd: { $exists: false } }, { vaziOd: null }, { vaziOd: { $lte: now } }] },
+        { $or: [{ vaziDo: { $exists: false } }, { vaziDo: null }, { vaziDo: { $gte: now } }] }
+      ]
+    });
+    if (oglasi.length === 0) {
+      return res.json(null);
+    }
+    const nasumican = oglasi[Math.floor(Math.random() * oglasi.length)];
+    res.json(nasumican);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Greška pri dohvatanju oglasa." });
   }
 });
 
