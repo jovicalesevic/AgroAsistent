@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5174" }));
+app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
 app.use(express.json());
 
 if (!process.env.MONGO_URI) {
@@ -27,6 +27,10 @@ mongoose
     process.exit(1);
   });
 
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/beleske", require("./routes/beleske"));
+app.use("/api/parcels", require("./routes/parcele"));
+
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Server radi." });
 });
@@ -34,3 +38,4 @@ app.get("/api/health", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server radi na http://localhost:${PORT}`);
 });
+
