@@ -5,6 +5,7 @@ import LokalniResursi from './components/LokalniResursi'
 import BerzaKurs from './components/BerzaKurs'
 import KorisniPortali from './components/KorisniPortali'
 import Kalkulator from './components/Kalkulator'
+import Beleznica from './components/Beleznica'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <BerzaKurs />
         <KorisniPortali />
         <Kalkulator />
+        <Beleznica />
       </main>
     </div>
   )

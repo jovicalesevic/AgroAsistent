@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const beleskaSchema = new mongoose.Schema({
   vlasnik_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
     required: false
   },
   text: {

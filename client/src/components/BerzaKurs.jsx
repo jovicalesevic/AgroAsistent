@@ -21,7 +21,7 @@ export default function BerzaKurs() {
       <div className="grid gap-4 sm:grid-cols-2">
         <a href="https://www.stips.minpolj.gov.rs/" target="_blank" rel="noopener noreferrer"
           className="group rounded-2xl border border-forest-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-          <div class="flex items-start gap-4">
+          <div className="flex items-start gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-forest-700 text-2xl text-white shrink-0">📈</div>
             <div>
               <h3 className="text-lg font-semibold text-forest-900">Berzanske cene</h3>

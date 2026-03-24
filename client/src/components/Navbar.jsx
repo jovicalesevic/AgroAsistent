@@ -106,10 +106,10 @@ export default function Navbar() {
             ) : (
               <div className="flex flex-col gap-3">
                 <p className="text-sm font-medium text-forest-700">Prijavite se da pristupite beležnici i parcelama</p>
-                <SignInButton mode="modal">
+                <SignInButton mode="redirect" redirectUrl="http://localhost:5173">
                   <button className="w-full rounded-xl bg-forest-700 px-4 py-2 text-sm font-semibold text-white hover:bg-forest-600 transition">
-                    Prijavi se / Registruj se
-                  </button>
+                  Prijavi se / Registruj se
+                   </button>
                 </SignInButton>
               </div>
             )}
