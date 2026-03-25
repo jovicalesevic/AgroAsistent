@@ -7,6 +7,7 @@ import KorisniPortali from './components/KorisniPortali'
 import Kalkulator from './components/Kalkulator'
 import Beleznica from './components/Beleznica'
 import Parcele from './components/Parcele'
+import Footer from './components/Footer'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Kalkulator />
         <Beleznica />
         <Parcele />
+        <Footer />
       </main>
     </div>
   )
