@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@clerk/clerk-react'
 
-const API_BASE = ''
+const API_BASE = import.meta.env.VITE_API_URL || ''
 
 function ParcelaCard({ parcela: p, getHeaders, onRefresh }) {
   const [editMode, setEditMode] = useState(false)
