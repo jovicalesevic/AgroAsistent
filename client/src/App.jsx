@@ -6,6 +6,7 @@ import BerzaKurs from './components/BerzaKurs'
 import KorisniPortali from './components/KorisniPortali'
 import Kalkulator from './components/Kalkulator'
 import Beleznica from './components/Beleznica'
+import Parcele from './components/Parcele'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <KorisniPortali />
         <Kalkulator />
         <Beleznica />
+        <Parcele />
       </main>
     </div>
   )

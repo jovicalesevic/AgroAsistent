@@ -37,3 +37,12 @@ exports.updateParcela = async (req, res) => {
     res.status(500).json({ error: "Greška pri ažuriranju parcele." });
   }
 };
+
+exports.deleteAllParcele = async (req, res) => {
+  try {
+    await Parcela.deleteMany({ vlasnik_id: req.user.id })
+    res.json({ message: "Sve parcele obrisane." })
+  } catch (err) {
+    res.status(500).json({ error: "Greška pri brisanju parcela." })
+  }
+};
