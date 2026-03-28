@@ -8,6 +8,8 @@ import Kalkulator from './components/Kalkulator'
 import Beleznica from './components/Beleznica'
 import Parcele from './components/Parcele'
 import Footer from './components/Footer'
+import OglasBanner from './components/OglasBanner'
+import AdminPanel from './components/AdminPanel'
 
 function App() {
   return (
@@ -22,8 +24,10 @@ function App() {
         <Kalkulator />
         <Beleznica />
         <Parcele />
+        <AdminPanel />
         <Footer />
       </main>
+      <OglasBanner />
     </div>
   )
 }
