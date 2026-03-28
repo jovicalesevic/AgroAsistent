@@ -34,6 +34,7 @@ mongoose
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/beleske", require("./routes/beleske"));
 app.use("/api/parcels", require("./routes/parcele"));
+app.use("/api/oglasi", require("./routes/oglasi"));
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Server radi." });
