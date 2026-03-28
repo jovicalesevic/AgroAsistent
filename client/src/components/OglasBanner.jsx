@@ -39,11 +39,11 @@ export default function OglasBanner() {
             <p className="text-sm text-gray-700 italic">{oglas.sadrzaj}</p>
           )}
           {oglas.tip === 'slika' && oglas.mediaUrl && (
-            <img src={oglas.mediaUrl} alt={oglas.naslov || 'Oglas'} className="h-12 object-contain" />
-          )}
-          {oglas.tip === 'video' && oglas.mediaUrl && (
-            <video src={oglas.mediaUrl} autoPlay muted loop className="h-12" />
-          )}
+  <img src={oglas.mediaUrl} alt={oglas.naslov || 'Oglas'} className="h-24 object-contain" />
+)}
+{oglas.tip === 'video' && oglas.mediaUrl && (
+  <video src={oglas.mediaUrl} autoPlay muted loop className="h-24" />
+)}
           {oglas.naslov && (
             <p className="text-xs font-semibold text-gray-600 mt-1">{oglas.naslov}</p>
           )}
