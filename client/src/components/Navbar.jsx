@@ -1,3 +1,4 @@
+import OApplikaciji from './OApplikaciji'
 import { useState } from 'react'
 import { useUser, useClerk, SignInButton } from '@clerk/clerk-react'
 import { useLokacija } from '../context/LokacijaContext'
@@ -68,7 +69,7 @@ export default function Navbar() {
             <span>Vreme</span>
             <span className="text-xs">{showVreme ? '▲' : '▼'}</span>
           </button>
-
+          <OApplikaciji />
           {/* Dugme 3 — Auth */}
           <button
             onClick={() => { setShowAuth(!showAuth); setShowLokacija(false); setShowVreme(false) }}
