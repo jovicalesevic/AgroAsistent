@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@clerk/clerk-react'
-
-const API_BASE = import.meta.env.VITE_API_URL || ''
+import { apiUrl, getAuthHeaders } from '../api/client'
 
 function ParcelaCard({ parcela: p, getHeaders, onRefresh }) {
   const [editMode, setEditMode] = useState(false)
@@ -10,7 +9,7 @@ function ParcelaCard({ parcela: p, getHeaders, onRefresh }) {
   const sacuvajNaziv = async () => {
     try {
       const headers = await getHeaders()
-      const res = await fetch(`/api/parcels/${p._id}`, {
+      const res = await fetch(apiUrl(`/api/parcels/${p._id}`), {
         method: 'PUT',
         headers,
         body: JSON.stringify({ naziv_parcele: naziv.trim() })
@@ -72,21 +71,15 @@ export default function Parcele() {
   const [parcele, setParcele] = useState([])
   const [pasteText, setPasteText] = useState('')
   const [loading, setLoading] = useState(false)
-  const [poruka, setPoruka] = useState('')
+  const [poruka, setPoruka] = useState(null)
 
-  const getHeaders = async () => {
-    const token = await getToken()
-    return {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
+  const getHeaders = () => getAuthHeaders(getToken)
 
   const ucitaj = async () => {
     setLoading(true)
     try {
       const headers = await getHeaders()
-      const res = await fetch(`${API_BASE}/api/parcels`, { headers })
+      const res = await fetch(apiUrl('/api/parcels'), { headers })
       if (res.ok) setParcele(await res.json())
     } catch (err) {
       console.error(err)
@@ -127,40 +120,46 @@ export default function Parcele() {
     if (!pasteText.trim()) return
     const parsed = parsirajParcele(pasteText)
     if (parsed.length === 0) {
-      setPoruka('Nije pronadjena nijedna parcela. Proveri format tabele.')
+      setPoruka({ ok: false, text: 'Nije pronađena nijedna parcela. Proveri format tabele.' })
       return
     }
     setLoading(true)
-    setPoruka('')
+    setPoruka(null)
     try {
       const headers = await getHeaders()
-      const res = await fetch(`${API_BASE}/api/parcels/import`, {
+      const res = await fetch(apiUrl('/api/parcels/import'), {
         method: 'POST',
         headers,
         body: JSON.stringify(parsed)
       })
       if (res.ok) {
         const data = await res.json()
-        setPoruka(`Uspesno uvezeno ${data.count} parcela.`)
+        setPoruka({ ok: true, text: `Uspešno uvezeno ${data.count} parcela.` })
         setPasteText('')
         await ucitaj()
       } else {
-        setPoruka('Greska pri uvozu parcela.')
+        let detail = 'Greška pri uvozu parcela.'
+        try {
+          const err = await res.json()
+          if (err.error) detail = err.error
+        } catch (_) { /* ignore */ }
+        setPoruka({ ok: false, text: detail })
       }
     } catch (err) {
       console.error(err)
-      setPoruka('Greska pri uvozu parcela.')
+      setPoruka({ ok: false, text: 'Greška pri uvozu parcela.' })
     } finally {
       setLoading(false)
     }
   }
+
   const obrisiSve = async () => {
-    if (!confirm('Da li zelite da obrisete sve parcele?')) return
+    if (!confirm('Da li želite da obrišete sve parcele?')) return
     try {
       const headers = await getHeaders()
-      await fetch(`${API_BASE}/api/parcels`, { method: 'DELETE', headers })
+      await fetch(apiUrl('/api/parcels'), { method: 'DELETE', headers })
       setParcele([])
-      setPoruka('Sve parcele obrisane.')
+      setPoruka({ ok: true, text: 'Sve parcele obrisane.' })
     } catch (err) {
       console.error(err)
     }
@@ -196,16 +195,16 @@ export default function Parcele() {
           {parcele.length > 0 && (
             <button type="button" onClick={obrisiSve}
               className="rounded-xl border border-red-300 bg-red-50 px-5 py-2.5 text-base font-medium text-red-700 transition hover:bg-red-100">
-              Obrisi sve
+              Obriši sve
             </button>
           )}
         </div>
         {poruka && (
-          <p className={`mt-3 text-sm font-medium ${poruka.includes('spesno') || poruka.includes('vezen') ? 'text-green-600' : 'text-red-600'}`}>
-            {poruka}
+          <p className={`mt-3 text-sm font-medium ${poruka.ok ? 'text-green-600' : 'text-red-600'}`}>
+            {poruka.text}
           </p>
         )}
-        {loading && <p className="mt-4 text-sm text-forest-600">Ucitavanje...</p>}
+        {loading && <p className="mt-4 text-sm text-forest-600">Učitavanje...</p>}
         {parcele.length > 0 && (
           <div className="mt-6 flex flex-col gap-3">
             {parcele.map(p => (

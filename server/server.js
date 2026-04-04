@@ -7,13 +7,22 @@ const { clerkMiddleware } = require("./middleware/auth");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "https://agroasistent-client.onrender.com"
-  ]
-}));
+const defaultOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://agroasistent-client.onrender.com"
+];
+const extraOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+const corsOrigins = [...new Set([...defaultOrigins, ...extraOrigins])];
+
+app.use(
+  cors({
+    origin: corsOrigins
+  })
+);
 
 app.use(express.json());
 app.use(clerkMiddleware());

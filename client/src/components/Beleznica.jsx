@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@clerk/clerk-react'
-
-const API_BASE = import.meta.env.VITE_API_URL || ''
+import { apiUrl, getAuthHeaders } from '../api/client'
 
 export default function Beleznica() {
   const { getToken, isSignedIn } = useAuth()
@@ -10,19 +9,13 @@ export default function Beleznica() {
   const [prikazano, setPrikazano] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const getHeaders = async () => {
-    const token = await getToken()
-    return {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
+  const getHeaders = () => getAuthHeaders(getToken)
 
   const ucitaj = async () => {
     setLoading(true)
     try {
       const headers = await getHeaders()
-      const res = await fetch(`${API_BASE}/api/beleske`, { headers })
+      const res = await fetch(apiUrl('/api/beleske'), { headers })
       if (res.ok) setBeleske(await res.json())
     } catch (err) {
       console.error(err)
@@ -32,11 +25,10 @@ export default function Beleznica() {
   }
 
   const sacuvaj = async () => {
-    console.log('sacuvaj pozvano, tekst:', tekst)
     if (!tekst.trim()) return
     try {
       const headers = await getHeaders()
-      const res = await fetch(`${API_BASE}/api/beleske`, {
+      const res = await fetch(apiUrl('/api/beleske'), {
         method: 'POST',
         headers,
         body: JSON.stringify({ text: tekst.trim() })
@@ -53,7 +45,7 @@ export default function Beleznica() {
   const toggle = async (id) => {
     try {
       const headers = await getHeaders()
-      await fetch(`${API_BASE}/api/beleske/${id}/toggle`, { method: 'PUT', headers })
+      await fetch(apiUrl(`/api/beleske/${id}/toggle`), { method: 'PUT', headers })
       await ucitaj()
     } catch (err) {
       console.error(err)
@@ -63,7 +55,7 @@ export default function Beleznica() {
   const obrisi = async (id) => {
     try {
       const headers = await getHeaders()
-      await fetch(`${API_BASE}/api/beleske/${id}`, { method: 'DELETE', headers })
+      await fetch(apiUrl(`/api/beleske/${id}`), { method: 'DELETE', headers })
       await ucitaj()
     } catch (err) {
       console.error(err)
@@ -74,7 +66,7 @@ export default function Beleznica() {
     if (!confirm('Da li želite da obrišete sve beleške?')) return
     try {
       const headers = await getHeaders()
-      await fetch(`${API_BASE}/api/beleske`, { method: 'DELETE', headers })
+      await fetch(apiUrl('/api/beleske'), { method: 'DELETE', headers })
       await ucitaj()
     } catch (err) {
       console.error(err)

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-react'
-
-const API_BASE = import.meta.env.VITE_API_URL || ''
+import { apiUrl, getAuthHeaders } from '../api/client'
 
 export default function AdminPanel() {
   const { getToken } = useAuth()
@@ -22,18 +21,12 @@ export default function AdminPanel() {
 
   const isAdmin = user?.publicMetadata?.role === 'admin'
 
-  const getHeaders = async () => {
-    const token = await getToken()
-    return {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }
+  const getHeaders = () => getAuthHeaders(getToken)
 
   const ucitajOglase = async () => {
     try {
       const headers = await getHeaders()
-      const res = await fetch(`${API_BASE}/api/oglasi`, { headers })
+      const res = await fetch(apiUrl('/api/oglasi'), { headers })
       if (res.ok) setOglasi(await res.json())
     } catch (err) {
       console.error(err)
@@ -49,7 +42,7 @@ export default function AdminPanel() {
     setPoruka('')
     try {
       const headers = await getHeaders()
-      const res = await fetch(`${API_BASE}/api/oglasi`, {
+      const res = await fetch(apiUrl('/api/oglasi'), {
         method: 'POST',
         headers,
         body: JSON.stringify(forma)
@@ -72,7 +65,7 @@ export default function AdminPanel() {
   const toggle = async (id) => {
     try {
       const headers = await getHeaders()
-      await fetch(`${API_BASE}/api/oglasi/${id}/toggle`, { method: 'PUT', headers })
+      await fetch(apiUrl(`/api/oglasi/${id}/toggle`), { method: 'PUT', headers })
       await ucitajOglase()
     } catch (err) {
       console.error(err)
@@ -83,7 +76,7 @@ export default function AdminPanel() {
     if (!confirm('Da li želite da obrišete oglas?')) return
     try {
       const headers = await getHeaders()
-      await fetch(`${API_BASE}/api/oglasi/${id}`, { method: 'DELETE', headers })
+      await fetch(apiUrl(`/api/oglasi/${id}`), { method: 'DELETE', headers })
       await ucitajOglase()
     } catch (err) {
       console.error(err)
@@ -155,7 +148,7 @@ export default function AdminPanel() {
             {loading ? 'Čuvanje...' : 'Kreiraj oglas'}
           </button>
           {poruka && (
-            <p className={`text-sm font-medium ${poruka.includes('spešno') ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`text-sm font-medium ${poruka.includes('spešno') || poruka.includes('pešno') ? 'text-green-600' : 'text-red-600'}`}>
               {poruka}
             </p>
           )}

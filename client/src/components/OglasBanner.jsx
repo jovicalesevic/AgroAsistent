@@ -1,23 +1,27 @@
 import { useState, useEffect } from 'react'
+import { apiUrl } from '../api/client'
 
-const API_BASE = import.meta.env.VITE_API_URL || ''
+async function fetchAktivniOglas() {
+  const res = await fetch(apiUrl('/api/oglasi/aktivni'))
+  if (!res.ok) return null
+  const data = await res.json()
+  return data || null
+}
 
 export default function OglasBanner() {
   const [oglas, setOglas] = useState(null)
   const [zatvoren, setZatvoren] = useState(false)
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/oglasi/aktivni`)
-      .then(r => r.json())
-      .then(data => {
+    fetchAktivniOglas()
+      .then((data) => {
         if (data) setOglas(data)
       })
       .catch(() => {})
 
     const interval = setInterval(() => {
-      fetch(`${API_BASE}/api/oglasi/aktivni`)
-        .then(r => r.json())
-        .then(data => {
+      fetchAktivniOglas()
+        .then((data) => {
           if (data) {
             setOglas(data)
             setZatvoren(false)
@@ -39,11 +43,11 @@ export default function OglasBanner() {
             <p className="text-sm text-gray-700 italic">{oglas.sadrzaj}</p>
           )}
           {oglas.tip === 'slika' && oglas.mediaUrl && (
-  <img src={oglas.mediaUrl} alt={oglas.naslov || 'Oglas'} className="h-24 object-contain" />
-)}
-{oglas.tip === 'video' && oglas.mediaUrl && (
-  <video src={oglas.mediaUrl} autoPlay muted loop className="h-24" />
-)}
+            <img src={oglas.mediaUrl} alt={oglas.naslov || 'Oglas'} className="h-24 object-contain" />
+          )}
+          {oglas.tip === 'video' && oglas.mediaUrl && (
+            <video src={oglas.mediaUrl} autoPlay muted loop className="h-24" />
+          )}
           {oglas.naslov && (
             <p className="text-xs font-semibold text-gray-600 mt-1">{oglas.naslov}</p>
           )}

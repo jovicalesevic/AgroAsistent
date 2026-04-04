@@ -4,6 +4,7 @@ import { useLokacija } from '../context/LokacijaContext'
 async function fetchVreme(lat, lon) {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&hourly=precipitation_probability&daily=sunrise,sunset&timezone=Europe%2FBelgrade`
   const res = await fetch(url)
+  if (!res.ok) throw new Error('Vremenski servis nije dostupan.')
   return res.json()
 }
 

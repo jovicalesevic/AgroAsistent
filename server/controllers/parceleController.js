@@ -1,5 +1,7 @@
 const Parcela = require("../models/Parcela");
 
+const MAX_PARCELA_PO_ZAHTEVU = 500;
+
 exports.getParcele = async (req, res) => {
   try {
     const parcele = await Parcela.find({ vlasnik_id: req.user.id });
@@ -14,6 +16,11 @@ exports.importParcele = async (req, res) => {
     const parcele = req.body;
     if (!Array.isArray(parcele))
       return res.status(400).json({ error: "Očekivan je niz objekata parcela." });
+    if (parcele.length > MAX_PARCELA_PO_ZAHTEVU) {
+      return res.status(400).json({
+        error: `Maksimalno ${MAX_PARCELA_PO_ZAHTEVU} parcela po zahtevu.`
+      });
+    }
     const parceleSaVlasnikom = parcele.map(p => ({ ...p, vlasnik_id: req.user.id }));
     const result = await Parcela.insertMany(parceleSaVlasnikom);
     res.status(201).json({ message: "Parcele uspešno uvezene.", count: result.length });

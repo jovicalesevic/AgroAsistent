@@ -1,5 +1,24 @@
 const Oglas = require("../models/Oglas");
 
+const OGLAS_POLJA = [
+  "naslov",
+  "sadrzaj",
+  "tip",
+  "mediaUrl",
+  "link",
+  "vaziOd",
+  "vaziDo",
+  "aktivan"
+];
+
+function teloOglasa(body) {
+  const out = {};
+  for (const k of OGLAS_POLJA) {
+    if (body[k] !== undefined) out[k] = body[k];
+  }
+  return out;
+}
+
 exports.getAktivniOglas = async (req, res) => {
   try {
     const now = new Date();
@@ -29,7 +48,7 @@ exports.getAllOglasi = async (req, res) => {
 
 exports.createOglas = async (req, res) => {
   try {
-    const oglas = new Oglas(req.body);
+    const oglas = new Oglas(teloOglasa(req.body));
     await oglas.save();
     res.status(201).json(oglas);
   } catch (err) {
@@ -39,7 +58,9 @@ exports.createOglas = async (req, res) => {
 
 exports.updateOglas = async (req, res) => {
   try {
-    const oglas = await Oglas.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const oglas = await Oglas.findByIdAndUpdate(req.params.id, teloOglasa(req.body), {
+      new: true
+    });
     if (!oglas) return res.status(404).json({ error: "Oglas nije pronađen." });
     res.json(oglas);
   } catch (err) {

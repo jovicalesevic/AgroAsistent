@@ -19,4 +19,6 @@ const beleskaSchema = new mongoose.Schema({
   }
 });
 
+beleskaSchema.index({ vlasnik_id: 1 });
+
 module.exports = mongoose.model("Beleska", beleskaSchema);

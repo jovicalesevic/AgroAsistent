@@ -10,20 +10,15 @@ exports.getBeleske = async (req, res) => {
 };
 
 exports.createBeleska = async (req, res) => {
-  console.log('createBeleska pozvano, user:', req.user)
-  console.log('body:', req.body) 
   try {
     const { text } = req.body;
-    console.log('text:', text)
     if (!text || !text.trim())
       return res.status(400).json({ error: "Tekst beleške je obavezan." });
     const beleska = new Beleska({ text: text.trim(), vlasnik_id: req.user.id });
-    console.log('beleska pre save:', beleska)
     await beleska.save();
-    console.log('beleska sacuvana!')
     res.status(201).json(beleska);
   } catch (err) {
-    console.error('GRESKA:', err.message)
+    console.error(err);
     res.status(500).json({ error: "Greška pri čuvanju beleške." });
   }
 };

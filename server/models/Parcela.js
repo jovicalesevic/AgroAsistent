@@ -30,4 +30,6 @@ const parcelaSchema = new mongoose.Schema({
   }
 });
 
+parcelaSchema.index({ vlasnik_id: 1 });
+
 module.exports = mongoose.model("Parcela", parcelaSchema);
