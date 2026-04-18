@@ -3,3 +3,6 @@ node_modules/
 .env.local
 client/.env.local
 server/.env
+
+# Lične beleške za obuku / kontekst (samo lokalno)
+LEARNING.md
