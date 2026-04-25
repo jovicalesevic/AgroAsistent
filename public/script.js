@@ -24,10 +24,7 @@ window.tailwind.config = {
 const API_BASE = "";
 
 function getAuthHeaders() {
-  const headers = { "Content-Type": "application/json" };
-  const token = localStorage.getItem("token");
-  if (token) headers["Authorization"] = "Bearer " + token;
-  return headers;
+  return { "Content-Type": "application/json" };
 }
 
 function handle401(res) {
@@ -61,16 +58,12 @@ async function prikaziOglas() {
 }
 
 function checkAuth() {
-  const token = localStorage.getItem("token");
+  const legacyNotice = document.getElementById("legacy-auth-notice");
   const authContainer = document.getElementById("authContainer");
   const beleznicaParceleSection = document.getElementById("beleznica-parcele");
-  if (token) {
-    if (authContainer) authContainer.classList.add("hidden");
-    if (beleznicaParceleSection) beleznicaParceleSection.classList.remove("hidden");
-  } else {
-    if (authContainer) authContainer.classList.remove("hidden");
-    if (beleznicaParceleSection) beleznicaParceleSection.classList.add("hidden");
-  }
+  if (legacyNotice) legacyNotice.classList.remove("hidden");
+  if (authContainer) authContainer.classList.add("hidden");
+  if (beleznicaParceleSection) beleznicaParceleSection.classList.add("hidden");
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -78,107 +71,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   prikaziOglas();
   setInterval(prikaziOglas, 30000);
 
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("token");
-      location.reload();
-    });
-  }
-
-  const loginForm = document.getElementById("loginForm");
-  const registerForm = document.getElementById("registerForm");
-  const authMessage = document.getElementById("authMessage");
-  const authTabLogin = document.getElementById("auth-tab-login");
-  const authTabRegister = document.getElementById("auth-tab-register");
-
-  const showAuthMessage = (text, isError = false) => {
-    if (!authMessage) return;
-    authMessage.textContent = text;
-    authMessage.classList.remove("hidden", "text-green-600", "text-red-600");
-    authMessage.classList.add(isError ? "text-red-600" : "text-green-600");
-  };
-
-  const hideAuthMessage = () => {
-    if (authMessage) {
-      authMessage.classList.add("hidden");
-      authMessage.textContent = "";
-    }
-  };
-
-  if (authTabLogin && authTabRegister && loginForm && registerForm) {
-    authTabLogin.addEventListener("click", () => {
-      loginForm.classList.remove("hidden");
-      registerForm.classList.add("hidden");
-      authTabLogin.classList.add("bg-amber-500");
-      authTabLogin.classList.remove("bg-forest-200");
-      authTabRegister.classList.remove("bg-amber-500");
-      authTabRegister.classList.add("bg-forest-200");
-      hideAuthMessage();
-    });
-    authTabRegister.addEventListener("click", () => {
-      registerForm.classList.remove("hidden");
-      loginForm.classList.add("hidden");
-      authTabRegister.classList.add("bg-amber-500");
-      authTabRegister.classList.remove("bg-forest-200");
-      authTabLogin.classList.remove("bg-amber-500");
-      authTabLogin.classList.add("bg-forest-200");
-      hideAuthMessage();
-    });
-  }
-
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      hideAuthMessage();
-      const email = document.getElementById("login-email")?.value?.trim();
-      const password = document.getElementById("login-password")?.value;
-      if (!email || !password) return;
-      try {
-        const res = await fetch(`${API_BASE}/api/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          localStorage.setItem("token", data.token);
-          document.getElementById("authContainer")?.classList.add("hidden");
-          document.getElementById("beleznica-parcele")?.classList.remove("hidden");
-        } else {
-          showAuthMessage(data.error || "Greška pri prijavi.", true);
-        }
-      } catch (err) {
-        showAuthMessage("Greška pri prijavi.", true);
-      }
-    });
-  }
-
-  if (registerForm) {
-    registerForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      hideAuthMessage();
-      const ime = document.getElementById("register-ime")?.value?.trim();
-      const email = document.getElementById("register-email")?.value?.trim();
-      const password = document.getElementById("register-password")?.value;
-      if (!ime || !email || !password) return;
-      try {
-        const res = await fetch(`${API_BASE}/api/auth/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ime, email, password })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          showAuthMessage("Uspešno ste se registrovali. Sada se možete prijaviti.");
-        } else {
-          showAuthMessage(data.error || "Greška pri registraciji.", true);
-        }
-      } catch (err) {
-        showAuthMessage("Greška pri registraciji.", true);
-      }
-    });
-  }
 
   const DEFAULT_LOCATION = {
     name: "Brus",
@@ -709,14 +601,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       uveziParceleBtn.disabled = true;
       document.body.style.cursor = "wait";
       try {
-        const token = localStorage.getItem("token");
-        console.log("4. Šaljem podatke na server sa tokenom...");
+        console.log("4. Šaljem podatke na server...");
         const res = await fetch(`${API_BASE}/api/parcels/import`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token
-          },
+          headers: getAuthHeaders(),
           body: JSON.stringify(parcele)
         });
         console.log("5. Odgovor sa servera stigao:", res);
@@ -734,9 +622,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  if (localStorage.getItem("token")) {
-    await ucitajIPrikaziBeleske();
-  }
+  // Legacy static UI is no longer used for Clerk auth-protected features.
 
   if (!navigator.geolocation) {
     fetchWeather(DEFAULT_LOCATION);

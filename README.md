@@ -74,7 +74,6 @@ cd ../client && npm install
 ```
 PORT=5000
 MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
 CLERK_SECRET_KEY=your_clerk_secret_key
 CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 CLIENT_URL=http://localhost:5173
@@ -93,6 +92,8 @@ npm run dev
 ```
 
 The app will be available at `http://localhost:5173`.
+
+Legacy static files in `public/` are kept only for reference and are not used for Clerk sign-in.
 
 ## Deployment
 
@@ -187,7 +188,6 @@ cd ../client && npm install
 ```
 PORT=5000
 MONGO_URI=tvoja_mongodb_uri
-JWT_SECRET=tvoja_jwt_tajna
 CLERK_SECRET_KEY=tvoj_clerk_secret_key
 CLERK_PUBLISHABLE_KEY=tvoj_clerk_publishable_key
 CLIENT_URL=http://localhost:5173
@@ -206,6 +206,8 @@ npm run dev
 ```
 
 Aplikacija će biti dostupna na `http://localhost:5173`.
+
+Legacy statički fajlovi u `public/` ostavljeni su samo kao referenca i ne koriste se za Clerk prijavu.
 
 ## Deployment
 
